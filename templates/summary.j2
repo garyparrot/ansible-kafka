@@ -1,0 +1,13 @@
+[Cluster Info]
+
+Zookeeper running at {{ groups[TARGET_GROUP][0] }}:{{ ZK_PORT }}
+
+Brokers:
+{% for host in groups[TARGET_GROUP] %}
+    {{ host }}:{{ BROKER_PORT }}
+{% endfor %}
+
+Broker Exporters:
+{% for host in groups[TARGET_GROUP] %}
+    {{ host }}:{{ EXPORTER_PORT }}
+{% endfor %}

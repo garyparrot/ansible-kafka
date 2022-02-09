@@ -1,0 +1,34 @@
+---
+- name: Search for Kafka Instance
+  ansible.builtin.command: "docker ps -aq --filter ancestor={{ KAFKA_IMAGE_NAME }}"
+  register: any_kafka
+
+- name: Search for Zookeeper
+  ansible.builtin.command: "docker ps -aq --filter ancestor={{ ZK_IMAGE_NAME }}"
+  register: any_zookeeper
+
+- name: debug
+  ansible.builtin.debug: 
+    var:
+      any_kafka
+  tags: debug
+
+- name: debug
+  ansible.builtin.debug: 
+    var:
+      any_zookeeper
+  tags: debug
+
+- name: stop and prune Kafka instance
+  community.docker.docker_container:
+    name: "{{ item }}"
+    state: absent
+    force_kill: yes
+  loop: "{{ any_kafka.stdout_lines }}"
+
+- name: stop and prune Zookeeper
+  community.docker.docker_container:
+    name: "{{ item }}"
+    state: absent
+    force_kill: yes
+  loop: "{{ any_zookeeper.stdout_lines }}"
