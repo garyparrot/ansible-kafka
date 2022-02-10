@@ -3,13 +3,16 @@
   gather_facts: false
 
   vars:
-    GIT_REPO: /tmp/ansible-automation/astraea
+    GIT_REPO: https://github.com/garyparrot/astraea.git
+    GIT_REPO_BRANCH: temp-fix
+    GIT_REPO_DEST: /tmp/ansible-automation/astraea
     ZK_IMAGE_NAME: ghcr.io/skiptests/astraea/zookeeper:3.7.0
     KAFKA_IMAGE_NAME: ghcr.io/skiptests/astraea/broker:2.8.1
     RANDOM_PORTS: "{{ range(10000, 30000) | shuffle(seed='0xCAFEBABE') }}"
     ZK_PORT: "{{ RANDOM_PORTS[0] }}"
     BROKER_PORT: "{{ RANDOM_PORTS[1] }}"
     EXPORTER_PORT: "{{ RANDOM_PORTS[2] }}"
+    JMX_PORT: "{{ RANDOM_PORTS[3] }}"
     TARGET_GROUP: hosts
 
   pre_tasks:
@@ -20,26 +23,28 @@
   tasks:
     - name: Clone Astraea Project
       ansible.builtin.git:
-        repo: 'https://github.com/skiptests/astraea.git'
-        dest: "{{ GIT_REPO }}"
+        repo: "{{ GIT_REPO }}"
+        dest: "{{ GIT_REPO_DEST }}"
         update: no
+        version: "{{ GIT_REPO_BRANCH }}"
 
     # Launch servers
     - name: Remove old instances if necessary 
       import_tasks: tasks/remove-cluster.yml
 
     - name: Launch Zookeeper on specific hosts (execute script)
-      ansible.builtin.command: "{{ GIT_REPO }}/docker/start_zookeeper.sh"
+      ansible.builtin.command: "{{ GIT_REPO_DEST }}/docker/start_zookeeper.sh"
       environment:
         ZOOKEEPER_PORT: "{{ ZK_PORT }}"
       register: output_zookeeper_script
       when: inventory_hostname == groups[TARGET_GROUP][0]
 
     - name: Launch Apache Kafka on all hosts (execute script)
-      ansible.builtin.command: "{{ GIT_REPO }}/docker/start_broker.sh zookeeper.connect={{ groups[TARGET_GROUP][0] }}:{{ ZK_PORT }}"
+      ansible.builtin.command: "{{ GIT_REPO_DEST }}/docker/start_broker.sh zookeeper.connect={{ groups[TARGET_GROUP][0] }}:{{ ZK_PORT }}"
       environment:
         BROKER_PORT: "{{ BROKER_PORT }}"
         EXPORTER_PORT: "{{ EXPORTER_PORT }}"
+        JMX_PORT: "{{ JMX_PORT }}"
 
     # Generate useful cluster stat
     - name: Generate cluster summary
