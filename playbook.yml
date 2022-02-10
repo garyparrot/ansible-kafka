@@ -7,8 +7,9 @@
     GIT_REPO_BRANCH: temp-fix
     GIT_REPO_DEST: /tmp/ansible-automation/astraea
     ZK_IMAGE_NAME: ghcr.io/skiptests/astraea/zookeeper:3.7.0
+    KAFKA_SCRIPT: "{{ GIT_REPO_DEST }}/docker/start_broker.sh"
     KAFKA_IMAGE_NAME: ghcr.io/skiptests/astraea/broker:2.8.1
-    RANDOM_PORTS: "{{ range(10000, 30000) | shuffle(seed='0xCAFEBABE') }}"
+    RANDOM_PORTS: "{{ range(10000, 30000) | shuffle(seed='0xCAFEBABE'+ KAFKA_SCRIPT) }}"
     ZK_PORT: "{{ RANDOM_PORTS[0] }}"
     BROKER_PORT: "{{ RANDOM_PORTS[1] }}"
     EXPORTER_PORT: "{{ RANDOM_PORTS[2] }}"
@@ -40,7 +41,7 @@
       when: inventory_hostname == groups[TARGET_GROUP][0]
 
     - name: Launch Apache Kafka on all hosts (execute script)
-      ansible.builtin.command: "{{ GIT_REPO_DEST }}/docker/start_broker.sh zookeeper.connect={{ groups[TARGET_GROUP][0] }}:{{ ZK_PORT }}"
+      ansible.builtin.command: "{{ KAFKA_SCRIPT }} zookeeper.connect={{ groups[TARGET_GROUP][0] }}:{{ ZK_PORT }}"
       environment:
         BROKER_PORT: "{{ BROKER_PORT }}"
         EXPORTER_PORT: "{{ EXPORTER_PORT }}"
