@@ -15,25 +15,38 @@
     EXPORTER_PORT: "{{ RANDOM_PORTS[2] }}"
     JMX_PORT: "{{ RANDOM_PORTS[3] }}"
     TARGET_GROUP: hosts
+    DO_PACKAGE_INSTALL: "{{ INSTALL_PACKAGES | default(false) }}"
+    BASIC_KAFKA_ARGS:
+      - "{{ KAFKA_SCRIPT }}"
+      - "zookeeper.connect={{ groups[TARGET_GROUP][0] }}:{{ ZK_PORT }}"
+
 
   pre_tasks:
+    - name: Install python & pip on remote
+      ansible.builtin.package:
+        name:
+          - python
+          - pip
+        state: present
+      when: DO_PACKAGE_INSTALL
     - name: Install python docker library on remote
       ansible.builtin.pip:
         name: "docker==4.1.0"
+      when: DO_PACKAGE_INSTALL
 
   tasks:
     - name: Clone Astraea Project
       ansible.builtin.git:
         repo: "{{ GIT_REPO }}"
         dest: "{{ GIT_REPO_DEST }}"
-        update: no
+        update: yes
         version: "{{ GIT_REPO_BRANCH }}"
 
     # Launch servers
     - name: Remove old instances if necessary 
-      import_tasks: tasks/remove-cluster.yml
+      import_tasks: ../tasks/remove-cluster.yml
 
-    - name: Launch Zookeeper on specific hosts (execute script)
+    - name: Launch Zookeeper on specific host (execute script)
       ansible.builtin.command: "{{ GIT_REPO_DEST }}/docker/start_zookeeper.sh"
       environment:
         ZOOKEEPER_PORT: "{{ ZK_PORT }}"
@@ -41,14 +54,21 @@
       when: inventory_hostname == groups[TARGET_GROUP][0]
 
     - name: Launch Apache Kafka on all hosts (execute script)
-      ansible.builtin.command: "{{ KAFKA_SCRIPT }} zookeeper.connect={{ groups[TARGET_GROUP][0] }}:{{ ZK_PORT }}"
+      ansible.builtin.command: 
+        argv: "{{ BASIC_KAFKA_ARGS + EXTEND_KAFKA_ARGS }}"
       environment:
         BROKER_PORT: "{{ BROKER_PORT }}"
         EXPORTER_PORT: "{{ EXPORTER_PORT }}"
         JMX_PORT: "{{ JMX_PORT }}"
+      register: kafka_script_output
+
+    - name: debug kafka_script_output
+      ansible.builtin.debug:
+        var: kafka_script_output
+
 
     # Generate useful cluster stat
     - name: Generate cluster summary
       ansible.builtin.template:
-        src: ./templates/summary.j2
+        src: ../templates/summary.j2
         dest: /tmp/cluster-summary

@@ -25,6 +25,7 @@
     state: absent
     force_kill: yes
   loop: "{{ any_kafka.stdout_lines }}"
+  changed_when: any_kafka.stdout_lines | length > 0 | bool
 
 - name: stop and prune Zookeeper
   community.docker.docker_container:
@@ -32,3 +33,4 @@
     state: absent
     force_kill: yes
   loop: "{{ any_zookeeper.stdout_lines }}"
+  changed_when: any_kafka.stdout_lines | length > 0 | bool

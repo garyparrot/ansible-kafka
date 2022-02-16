@@ -11,3 +11,8 @@ Broker Exporters:
 {% for host in groups[TARGET_GROUP] %}
     {{ host }}:{{ EXPORTER_PORT }}
 {% endfor %}
+
+Broker JMX:
+{% for host in groups[TARGET_GROUP] %}
+    {{ host }}:{{ JMX_PORT }}
+{% endfor %}

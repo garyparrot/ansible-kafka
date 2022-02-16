@@ -1,0 +1,13 @@
+---
+- hosts: all
+  gather_facts: false
+
+- name: Import playbook
+  ansible.builtin.import_playbook: ./apache-kafka-cluster.yml
+  vars:
+    KAFKA_SCRIPT: "{{ GIT_REPO_DEST }}/docker/start_confluent_broker.sh"
+    KAFKA_IMAGE_NAME: confluentinc/cp-enterprise-kafka:latest
+    EXTEND_KAFKA_ARGS:
+      - "confluent.balancer.heal.uneven.load.trigger=ANY_UNEVEN_LOAD"
+      - "confluent.balancer.heal.uneven.load.trigger=ANY_UNEVEN_LOAD"
+      - "confluent.balancer.heal.uneven.load.trigger=ANY_UNEVEN_LOAD"

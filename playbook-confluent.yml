@@ -1,9 +1,0 @@
----
-- hosts: all
-  gather_facts: false
-
-- name: Import playbook
-  ansible.builtin.import_playbook: ./playbook.yml
-  vars:
-    KAFKA_SCRIPT: "{{ GIT_REPO_DEST }}/docker/start_confluent_broker.sh"
-    KAFKA_IMAGE_NAME: confluentinc/cp-enterprise-kafka:latest
