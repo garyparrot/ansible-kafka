@@ -1,0 +1,13 @@
+---
+- name: Search for node exporter instance
+  ansible.builtin.command: "docker ps -aq --filter ancestor=prom/node-exporter"
+  register: any_node_exporter
+
+- name: stop and prune node exporters
+  community.docker.docker_container:
+    name: "{{ item }}"
+    state: absent
+    force_kill: yes
+  loop: "{{ any_node_exporter. stdout_lines }}"
+  changed_when: any_node_exporter | length > 0 | bool
+  when: inventory_hostname in groups[TARGET_GROUP]

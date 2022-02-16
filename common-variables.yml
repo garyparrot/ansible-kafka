@@ -1,0 +1,19 @@
+---
+GIT_REPO: https://github.com/garyparrot/astraea.git
+GIT_REPO_BRANCH: temp-fix
+GIT_REPO_DEST: /tmp/ansible-automation/astraea
+ZK_IMAGE_NAME: ghcr.io/skiptests/astraea/zookeeper:3.7.0
+KAFKA_IMAGE_NAME: ghcr.io/skiptests/astraea/broker:2.8.1
+KAFKA_SCRIPT: "{{ GIT_REPO_DEST }}/docker/start_broker.sh"
+ZOOKEEPER_SCRIPT: "{{ GIT_REPO_DEST }}/docker/start_zookeeper.sh"
+PROMETHEUS_SCRIPT: "{{ GIT_REPO_DEST }}/docker/start_prometheus.sh"
+NODE_EXPORTER_SCRIPT: "{{ GIT_REPO_DEST }}/docker/start_node_exporter.sh"
+GRAFANA_SCRIPT: "{{ GIT_REPO_DEST }}/docker/start_grafana.sh"
+
+RANDOM_PORTS: "{{ range(10000, 30000) | shuffle(seed='0xCAFEBABE'+ KAFKA_SCRIPT) }}"
+ZK_PORT:             "{{ RANDOM_PORTS[0] }}"
+BROKER_PORT:         "{{ RANDOM_PORTS[1] }}"
+EXPORTER_PORT:       "{{ RANDOM_PORTS[2] }}"
+JMX_PORT:            "{{ RANDOM_PORTS[3] }}"
+NODE_EXPORTER_PORT:  "{{ RANDOM_PORTS[4] }}"
+PROMETHEUS_PORT:     "{{ RANDOM_PORTS[5] }}"

@@ -1,25 +1,13 @@
 ---
-- hosts: all
+- hosts: hosts
   gather_facts: false
 
+  vars_files:
+    - ../common-variables.yml
+
   vars:
-    GIT_REPO: https://github.com/garyparrot/astraea.git
-    GIT_REPO_BRANCH: temp-fix
-    GIT_REPO_DEST: /tmp/ansible-automation/astraea
-    ZK_IMAGE_NAME: ghcr.io/skiptests/astraea/zookeeper:3.7.0
-    KAFKA_SCRIPT: "{{ GIT_REPO_DEST }}/docker/start_broker.sh"
-    KAFKA_IMAGE_NAME: ghcr.io/skiptests/astraea/broker:2.8.1
-    RANDOM_PORTS: "{{ range(10000, 30000) | shuffle(seed='0xCAFEBABE'+ KAFKA_SCRIPT) }}"
-    ZK_PORT: "{{ RANDOM_PORTS[0] }}"
-    BROKER_PORT: "{{ RANDOM_PORTS[1] }}"
-    EXPORTER_PORT: "{{ RANDOM_PORTS[2] }}"
-    JMX_PORT: "{{ RANDOM_PORTS[3] }}"
     TARGET_GROUP: hosts
     DO_PACKAGE_INSTALL: "{{ INSTALL_PACKAGES | default(false) }}"
-    BASIC_KAFKA_ARGS:
-      - "{{ KAFKA_SCRIPT }}"
-      - "zookeeper.connect={{ groups[TARGET_GROUP][0] }}:{{ ZK_PORT }}"
-
 
   pre_tasks:
     - name: Install python & pip on remote
@@ -47,7 +35,7 @@
       import_tasks: ../tasks/remove-cluster.yml
 
     - name: Launch Zookeeper on specific host (execute script)
-      ansible.builtin.command: "{{ GIT_REPO_DEST }}/docker/start_zookeeper.sh"
+      ansible.builtin.command: "{{ ZOOKEEPER_SCRIPT }}"
       environment:
         ZOOKEEPER_PORT: "{{ ZK_PORT }}"
       register: output_zookeeper_script
@@ -55,7 +43,9 @@
 
     - name: Launch Apache Kafka on all hosts (execute script)
       ansible.builtin.command: 
-        argv: "{{ BASIC_KAFKA_ARGS + EXTEND_KAFKA_ARGS }}"
+        argv:
+          - "{{ KAFKA_SCRIPT }}"
+          - "zookeeper.connect={{ groups[TARGET_GROUP][0] }}:{{ ZK_PORT }}"
       environment:
         BROKER_PORT: "{{ BROKER_PORT }}"
         EXPORTER_PORT: "{{ EXPORTER_PORT }}"

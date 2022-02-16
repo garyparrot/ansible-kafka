@@ -1,0 +1,51 @@
+---
+- hosts: all
+  gather_facts: false
+
+  vars_files:
+    - ../common-variables.yml
+
+  vars:
+    TARGET_GROUP: "hosts"
+
+  tasks:
+    - name: Clone Astraea Project
+      ansible.builtin.git:
+        repo: "{{ GIT_REPO }}"
+        dest: "{{ GIT_REPO_DEST }}"
+        update: yes
+        version: "{{ GIT_REPO_BRANCH }}"
+
+    - name: stop old node exporter
+      ansible.builtin.import_tasks: ../tasks/remove-monitoring-tools.yml
+
+    - name: Launch Node Exporter on all host
+      ansible.builtin.command:
+        argv:
+          - "{{ NODE_EXPORTER_SCRIPT }}"
+      environment:
+        PORT: "{{ NODE_EXPORTER_PORT }}"
+      when: inventory_hostname in groups.hosts
+
+    - name: Launch Prometheus on first host
+      ansible.builtin.command:
+        argv:
+          - "{{ PROMETHEUS_SCRIPT }}"
+          - "start"
+          - ""
+          - "{{ groups[TARGET_GROUP] | join(',') }}"
+      environment:
+        PROMETHEUS_PORT: "{{ PROMETHEUS_PORT }}"
+      when: inventory_hostname == groups[TARGET_GROUP][0]
+
+    - name: Launch Grafana on localhost
+      ansible.builtin.command:
+        argv:
+          - "{{ GRAFANA_SCRIPT }}"
+          - "start"
+      when: inventory_hostname in groups.local
+
+    - name: Setup prometheus source for local Grafana 
+      ansible.builtin.command:
+          "{{ GRAFANA_SCRIPT }} add_prom_source admin:admin prometheus http://{{ groups[TARGET_GROUP][0] }}:{{ PROMETHEUS_PORT }}/"
+      when: inventory_hostname in groups.local
