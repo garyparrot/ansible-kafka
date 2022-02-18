@@ -32,8 +32,17 @@
         argv:
           - "{{ PROMETHEUS_SCRIPT }}"
           - "start"
-          - ""
-          - "{{ groups[TARGET_GROUP] | join(',') }}"
+      environment:
+        PROMETHEUS_PORT: "{{ PROMETHEUS_PORT }}"
+      when: inventory_hostname == groups[TARGET_GROUP][0]
+
+    - name: Refresh prometheus on first host
+      ansible.builtin.command:
+        argv:
+          - "{{ PROMETHEUS_SCRIPT }}"
+          - "refresh"
+          - "{{ groups[TARGET_GROUP] | product([JMX_PORT]) | map('join', ':') | join(',') }}"
+          - "{{ groups[TARGET_GROUP] | product([NODE_EXPORTER_PORT]) | map('join', ':') | join(',') }}"
       environment:
         PROMETHEUS_PORT: "{{ PROMETHEUS_PORT }}"
       when: inventory_hostname == groups[TARGET_GROUP][0]
