@@ -8,6 +8,8 @@
   vars:
     TARGET_GROUP: hosts
     DO_PACKAGE_INSTALL: "{{ INSTALL_PACKAGES | default(false) }}"
+    JMX_CONFIG_FILE: "/home/garyparrot/kafka-jmx-exporter.yml"
+    KAFKA_SCRIPT: "{{ KAFKA_SCRIPT | default(DEFAULT_KAFKA_SCRIPT) }}"
 
   pre_tasks:
     - name: Install python & pip on remote
@@ -21,6 +23,11 @@
       ansible.builtin.pip:
         name: "docker==4.1.0"
       when: DO_PACKAGE_INSTALL
+
+    - name: prepare jmx exporter config file
+      ansible.builtin.template:
+        src: ../templates/kafka-jmx-exporter.yml
+        dest: /home/garyparrot/kafka-jmx-exporter.yml
 
   tasks:
     - name: Clone Astraea Project
@@ -49,7 +56,8 @@
       environment:
         BROKER_PORT: "{{ BROKER_PORT }}"
         EXPORTER_PORT: "{{ EXPORTER_PORT }}"
-        JMX_PORT: "{{ JMX_PORT }}"
+        BROKER_JMX_PORT: "{{ JMX_PORT }}"
+        JMX_CONFIG_FILE: "{{ JMX_CONFIG_FILE | default('') }}"
       register: kafka_script_output
 
     - name: debug kafka_script_output

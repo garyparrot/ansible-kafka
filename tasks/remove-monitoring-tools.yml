@@ -3,6 +3,10 @@
   ansible.builtin.command: "docker ps -aq --filter ancestor=prom/node-exporter"
   register: any_node_exporter
 
+- name: Search for prometheus
+  ansible.builtin.command: "docker ps -aq --filter ancestor=prom/prometheus"
+  register: any_prometheus
+
 - name: stop and prune node exporters
   community.docker.docker_container:
     name: "{{ item }}"
@@ -10,4 +14,13 @@
     force_kill: yes
   loop: "{{ any_node_exporter. stdout_lines }}"
   changed_when: any_node_exporter | length > 0 | bool
+  when: inventory_hostname in groups[TARGET_GROUP]
+
+- name: 
+  community.docker.docker_container:
+    name: "{{ item }}"
+    state: stopped
+    force_kill: yes
+  loop: "{{ any_prometheus. stdout_lines }}"
+  changed_when: any_prometheus | length > 0 | bool
   when: inventory_hostname in groups[TARGET_GROUP]

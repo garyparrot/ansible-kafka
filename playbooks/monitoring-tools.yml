@@ -18,7 +18,7 @@
 
     - name: stop old node exporter
       ansible.builtin.import_tasks: ../tasks/remove-monitoring-tools.yml
-
+      
     - name: Launch Node Exporter on all host
       ansible.builtin.command:
         argv:
@@ -41,10 +41,12 @@
         argv:
           - "{{ PROMETHEUS_SCRIPT }}"
           - "refresh"
-          - "{{ groups[TARGET_GROUP] | product([JMX_PORT]) | map('join', ':') | join(',') }}"
+          - "{{ groups[TARGET_GROUP] | product([EXPORTER_PORT]) | map('join', ':') | join(',') }}"
           - "{{ groups[TARGET_GROUP] | product([NODE_EXPORTER_PORT]) | map('join', ':') | join(',') }}"
       environment:
         PROMETHEUS_PORT: "{{ PROMETHEUS_PORT }}"
+        scrape_interval: "3000ms"
+        scrape_timeout: "3000ms"
       when: inventory_hostname == groups[TARGET_GROUP][0]
 
     - name: Launch Grafana on localhost
@@ -57,4 +59,13 @@
     - name: Setup prometheus source for local Grafana 
       ansible.builtin.command:
           "{{ GRAFANA_SCRIPT }} add_prom_source admin:admin prometheus http://{{ groups[TARGET_GROUP][0] }}:{{ PROMETHEUS_PORT }}/"
+      when: inventory_hostname in groups.local
+
+    - name: debug
+      ansible.builtin.debug:
+        msg:
+            - "Exporter Port: {{ EXPORTER_PORT }}"
+            - "Bootstrap servers: {{ groups[TARGET_GROUP] | product([BROKER_PORT]) | map('join', ':') | join(',') }}"
+            - "Prometheus : http://{{ groups[TARGET_GROUP][0] }}:{{ PROMETHEUS_PORT }}/"
+            - "Grafana : http://localhost:3000/"
       when: inventory_hostname in groups.local

@@ -1,0 +1,10 @@
+lowercaseOutputName: true
+
+rules:
+# Special cases and very specific rules
+- pattern : kafka.log<type=Log, name=Size, topic=(.+), partition=(.+)><>Value
+  name: kafka_log_size
+  type: GAUGE
+  labels:
+    topic: "$1"
+    partition: "$2"

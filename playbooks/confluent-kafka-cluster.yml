@@ -2,6 +2,9 @@
 - hosts: hosts
   gather_facts: false
 
+  vars_files:
+    - ../common-variables.yml
+
 - name: Import playbook
   ansible.builtin.import_playbook: ./apache-kafka-cluster.yml
   vars:
