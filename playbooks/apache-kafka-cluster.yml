@@ -9,7 +9,7 @@
     TARGET_GROUP: hosts
     DO_PACKAGE_INSTALL: "{{ INSTALL_PACKAGES | default(false) }}"
     JMX_CONFIG_FILE: "/home/garyparrot/kafka-jmx-exporter.yml"
-    KAFKA_SCRIPT: "{{ KAFKA_SCRIPT | default(DEFAULT_KAFKA_SCRIPT) }}"
+    USE_KAFKA_SCRIPT: "{{ KAFKA_SCRIPT | default(DEFAULT_KAFKA_SCRIPT) }}"
 
   pre_tasks:
     - name: Install python & pip on remote
@@ -51,7 +51,7 @@
     - name: Launch Apache Kafka on all hosts (execute script)
       ansible.builtin.command: 
         argv:
-          - "{{ KAFKA_SCRIPT }}"
+          - "{{ USE_KAFKA_SCRIPT }}"
           - "zookeeper.connect={{ groups[TARGET_GROUP][0] }}:{{ ZK_PORT }}"
       environment:
         BROKER_PORT: "{{ BROKER_PORT }}"

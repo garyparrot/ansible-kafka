@@ -1,0 +1,45 @@
+---
+- hosts: payload_hosts
+  gather_facts: false
+
+  vars_files:
+    - ../common-variables.yml
+
+  vars:
+    BROKER_GROUP: hosts
+    DO_PACKAGE_INSTALL: "{{ INSTALL_PACKAGES | default(false) | bool }}"
+
+  pre_tasks:
+    - name: Install Java
+      ansible.builtin.package:
+        name:
+          - openjdk-11-jre-headless
+        state: present
+      when: DO_PACKAGE_INSTALL
+      become: yes
+
+  tasks:
+    - name: Clone Astraea Project
+      ansible.builtin.git:
+        repo: "{{ GIT_REPO }}"
+        dest: "{{ GIT_LOADING_REPO_DEST }}/{{ inventory_hostname }}"
+        update: yes
+        version: "{{ GIT_REPO_BRANCH }}"
+
+    - name: set fact, generate the bootstrap server address list
+      ansible.builtin.set_fact:
+        bootstrap_servers: "{{ groups[BROKER_GROUP] | product([BROKER_PORT]) | map('join', ':') | join(',') }}" 
+
+    - name: Apply loading
+      ansible.builtin.shell: 
+        cmd: >
+            ./gradlew run --args="performance 
+            --bootstrap.servers {{ bootstrap_servers }} 
+            --producers {{ producers | default(4) }} 
+            --consumers {{ consumers | default(8) }}
+            --partitions {{ partitions | default(30) }}
+            --record.size {{ record_size | default(10KiB) }}
+            --run.until {{ run_until | default(10m) }}
+            --topic {{ inventory_hostname }}-{{ range(1, 1000000) | random }}" 
+        # "
+        chdir: "{{ GIT_LOADING_REPO_DEST }}/{{ inventory_hostname }}"

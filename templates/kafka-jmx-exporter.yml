@@ -1,10 +1,41 @@
 lowercaseOutputName: true
 
 rules:
-# Special cases and very specific rules
+# log size in byte
 - pattern : kafka.log<type=Log, name=Size, topic=(.+), partition=(.+)><>Value
   name: kafka_log_size
   type: GAUGE
   labels:
     topic: "$1"
     partition: "$2"
+
+# Useful broker statistics
+- pattern : kafka.server<type=BrokerTopicMetrics, name=(.+)><>Count
+  name: kafka_server_$1
+  type: GAUGE
+
+# is controller active on this broker
+- pattern : kafka.controller<type=KafkaController,name=ActiveControllerCount><>Value
+  name: kafka_controller_is_controller
+  type: GAUGE
+
+# useful global info
+- pattern : kafka.controller<type=KafkaController,name=GlobalTopicCount><>Value
+  name: kafka_topic_count
+  type: GAUGE
+- pattern : kafka.controller<type=KafkaController,name=GlobalPartitionCount><>Value
+  name: kafka_partition_count
+  type: GAUGE
+
+# useful per-broker info
+- pattern : kafka.server<type=ReplicaManager, name=(.+)><>Value
+  name: kafka_server_replica_manager_$1
+  type: GAUGE
+
+# network processor & request handler average idle percent
+- pattern : kafka.network<type=SocketServer, name=NetworkProcessorAvgIdlePercent><>Value
+  name: kafka_server_network_processor_average_idle_percent
+  type: GAUGE
+- pattern : kafka.server<type=KafkaRequestHandlerPool, name=RequestHandlerAvgIdlePercent><>Value
+  name: kafka_server_network_processor_average_idle_percent
+  type: GAUGE

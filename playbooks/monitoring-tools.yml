@@ -1,5 +1,7 @@
 ---
-- hosts: all
+- hosts:
+    - hosts
+    - local
   gather_facts: false
 
   vars_files:
@@ -45,8 +47,8 @@
           - "{{ groups[TARGET_GROUP] | product([NODE_EXPORTER_PORT]) | map('join', ':') | join(',') }}"
       environment:
         PROMETHEUS_PORT: "{{ PROMETHEUS_PORT }}"
-        scrape_interval: "3000ms"
-        scrape_timeout: "3000ms"
+        scrape_interval: "500ms"
+        scrape_timeout: "500ms"
       when: inventory_hostname == groups[TARGET_GROUP][0]
 
     - name: Launch Grafana on localhost
