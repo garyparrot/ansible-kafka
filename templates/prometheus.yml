@@ -1,0 +1,29 @@
+global:
+  scrape_interval: 1s
+  external_labels:
+    monitor: 'prometheus'
+scrape_configs:
+  - job_name: 'kafka'
+    scrape_interval: 1s
+    scrape_timeout: 1s
+    static_configs:
+      - targets:
+        {% for host in groups[TARGET_GROUP] %}
+        - {{ host }}:{{ EXPORTER_PORT }}
+        {% endfor %}
+
+  - job_name: 'node'
+    scrape_interval: 1s
+    scrape_timeout: 1s
+    static_configs:
+      - targets:
+        {% for host in groups[TARGET_GROUP] %}
+        - {{ host }}:{{ NODE_EXPORTER_PORT }}
+        {% endfor %}
+
+  - job_name: 'kafka-exporter'
+    scrape_interval: 1s
+    scrape_timeout: 1s
+    static_configs:
+      - targets:
+        - 192.168.103.49:1234

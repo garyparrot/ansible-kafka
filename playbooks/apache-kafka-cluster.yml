@@ -16,9 +16,23 @@
       ansible.builtin.package:
         name:
           - python
+          - python-is-python3
           - pip
+          - acl
         state: present
       when: DO_PACKAGE_INSTALL
+      become: true
+
+    - name: fuck Python
+      ansible.builtin.pip:
+        name: "requests"
+      when: DO_PACKAGE_INSTALL
+
+    - name: fuck Python
+      ansible.builtin.pip:
+        name: "setuptools"
+      when: DO_PACKAGE_INSTALL
+      
     - name: Install python docker library on remote
       ansible.builtin.pip:
         name: "docker==4.1.0"
@@ -30,6 +44,9 @@
         dest: /home/garyparrot/kafka-jmx-exporter.yml
 
   tasks:
+    - name: Remove old instances if necessary 
+      import_tasks: ../tasks/remove-cluster.yml
+
     - name: Clone Astraea Project
       ansible.builtin.git:
         repo: "{{ GIT_REPO }}"
@@ -38,26 +55,40 @@
         version: "{{ GIT_REPO_BRANCH }}"
 
     # Launch servers
-    - name: Remove old instances if necessary 
-      import_tasks: ../tasks/remove-cluster.yml
-
     - name: Launch Zookeeper on specific host (execute script)
       ansible.builtin.command: "{{ ZOOKEEPER_SCRIPT }}"
       environment:
         ZOOKEEPER_PORT: "{{ ZK_PORT }}"
       register: output_zookeeper_script
       when: inventory_hostname == groups[TARGET_GROUP][0]
+    
+    - name: remove old broker folder
+      ansible.builtin.file:
+        path: "/data/kafka"
+        state: absent
+      become: true
+      become_user: user1001
+
+    - name: ensure dir
+      ansible.builtin.file:
+        path: "/data/kafka"
+        state: directory 
+      become: true
+      become_user: user1001
 
     - name: Launch Apache Kafka on all hosts (execute script)
       ansible.builtin.command: 
         argv:
           - "{{ USE_KAFKA_SCRIPT }}"
           - "zookeeper.connect={{ groups[TARGET_GROUP][0] }}:{{ ZK_PORT }}"
+          - "confluent.balancer.heal.uneven.load.trigger=ANY_UNEVEN_LOAD"
       environment:
         BROKER_PORT: "{{ BROKER_PORT }}"
         EXPORTER_PORT: "{{ EXPORTER_PORT }}"
         BROKER_JMX_PORT: "{{ JMX_PORT }}"
         JMX_CONFIG_FILE: "{{ JMX_CONFIG_FILE | default('') }}"
+        DATA_FOLDERS: "/data/kafka"
+        USERNAME: "garyparrot"
       register: kafka_script_output
 
     - name: debug kafka_script_output

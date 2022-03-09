@@ -2,6 +2,11 @@
 - hosts: payload_hosts
   gather_facts: false
 
+  vars_prompt:
+    - name: benchmark_name
+      prompt: Name this benchmark (this name will be prefix to every created topic)
+      private: no
+
   vars_files:
     - ../common-variables.yml
 
@@ -29,6 +34,16 @@
     - name: set fact, generate the bootstrap server address list
       ansible.builtin.set_fact:
         bootstrap_servers: "{{ groups[BROKER_GROUP] | product([BROKER_PORT]) | map('join', ':') | join(',') }}" 
+        random_suffix: "{{ range(1000000, 9999999) | random }}" 
+
+    - name: set fact
+      ansible.builtin.set_fact:
+        topic_name: "{{ inventory_hostname }}-{{ benchmark_name }}-{{ suffix | default(random_suffix) }}"
+      when: topic_name is not defined
+
+    - name: debug topic name
+      ansible.builtin.debug:
+        var: topic_name
 
     - name: Apply loading
       ansible.builtin.shell: 
@@ -36,10 +51,12 @@
             ./gradlew run --args="performance 
             --bootstrap.servers {{ bootstrap_servers }} 
             --producers {{ producers | default(4) }} 
-            --consumers {{ consumers | default(8) }}
-            --partitions {{ partitions | default(30) }}
-            --record.size {{ record_size | default(10KiB) }}
-            --run.until {{ run_until | default(10m) }}
-            --topic {{ inventory_hostname }}-{{ range(1, 1000000) | random }}" 
+            --consumers {{ consumers | default(8) }} 
+            --record.size {{ record_size | default("10KiB") }} 
+            --partitions {{ partitions | default(15) }} 
+            --replicas {{ replicas | default("2") }} 
+            --run.until {{ run_until | default("1h") }} 
+            --topic {{ topic_name }}
+            --throughput {{ throughput | default("5MiB") }}" 
         # "
         chdir: "{{ GIT_LOADING_REPO_DEST }}/{{ inventory_hostname }}"

@@ -38,13 +38,17 @@
         PROMETHEUS_PORT: "{{ PROMETHEUS_PORT }}"
       when: inventory_hostname == groups[TARGET_GROUP][0]
 
+    - name: Template the prometheus config file
+      ansible.builtin.template:
+        src: ../templates/prometheus.yml
+        dest: /home/garyparrot/prometheus.yml
+
     - name: Refresh prometheus on first host
       ansible.builtin.command:
         argv:
           - "{{ PROMETHEUS_SCRIPT }}"
           - "refresh"
-          - "{{ groups[TARGET_GROUP] | product([EXPORTER_PORT]) | map('join', ':') | join(',') }}"
-          - "{{ groups[TARGET_GROUP] | product([NODE_EXPORTER_PORT]) | map('join', ':') | join(',') }}"
+          - "/home/garyparrot/prometheus.yml"
       environment:
         PROMETHEUS_PORT: "{{ PROMETHEUS_PORT }}"
         scrape_interval: "500ms"

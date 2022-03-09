@@ -1,0 +1,22 @@
+---
+- hosts:
+    - hosts
+    - local
+  gather_facts: false
+
+  vars_files:
+    - ../common-variables.yml
+
+  vars:
+    TARGET_GROUP: hosts
+
+  tasks:
+    - name: info
+      ansible.builtin.debug:
+        msg:
+            - "Boostrap servers = {{ groups[TARGET_GROUP] | product([BROKER_PORT]) | map('join', ':') | join(',') }}"
+            - "Jmx servers = {{ groups[TARGET_GROUP] | product([JMX_PORT]) | map('join', ':') | join(',') }}"
+            - "Exporter = {{ groups[TARGET_GROUP] | product([EXPORTER_PORT]) | map('join', ':') | join(',') }}"
+            - "Prometheus = http://{{ groups[TARGET_GROUP][0] }}:{{ PROMETHEUS_PORT }}"
+            - "Grafana = http://localhost:3000/"
+      when: inventory_hostname in groups.local
