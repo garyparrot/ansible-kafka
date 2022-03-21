@@ -1,6 +1,6 @@
 ---
 - hosts: hosts
-  gather_facts: false
+  gather_facts: true
 
   vars_files:
     - ../common-variables.yml
@@ -8,44 +8,38 @@
   vars:
     TARGET_GROUP: hosts
     DO_PACKAGE_INSTALL: "{{ INSTALL_PACKAGES | default(false) }}"
-    JMX_CONFIG_FILE: "/home/garyparrot/kafka-jmx-exporter.yml"
+    JMX_CONFIG_FILE: "{{ GIT_LOADING_REPO_DEST }}/kafka-jmx-exporter.yml"
     USE_KAFKA_SCRIPT: "{{ KAFKA_SCRIPT | default(DEFAULT_KAFKA_SCRIPT) }}"
 
   pre_tasks:
-    - name: Install python & pip on remote
-      ansible.builtin.package:
-        name:
-          - python
-          - python-is-python3
-          - pip
-          - acl
-        state: present
-      when: DO_PACKAGE_INSTALL
-      become: true
-
-    - name: fuck Python
-      ansible.builtin.pip:
-        name: "requests"
-      when: DO_PACKAGE_INSTALL
-
-    - name: fuck Python
-      ansible.builtin.pip:
-        name: "setuptools"
-      when: DO_PACKAGE_INSTALL
-      
-    - name: Install python docker library on remote
-      ansible.builtin.pip:
-        name: "docker==4.1.0"
-      when: DO_PACKAGE_INSTALL
+    - name: ensure dir
+      ansible.builtin.file:
+        path: "{{ GIT_LOADING_REPO_DEST }}"
+        state: directory 
 
     - name: prepare jmx exporter config file
       ansible.builtin.template:
         src: ../templates/kafka-jmx-exporter.yml
-        dest: /home/garyparrot/kafka-jmx-exporter.yml
+        dest: "{{ JMX_CONFIG_FILE }}"
 
   tasks:
     - name: Remove old instances if necessary 
       import_tasks: ../tasks/remove-cluster.yml
+
+    - name: remove old broker folder
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop: "{{ DATA_FOLDERS.split(',') }}"
+      when: "DATA_FOLDERS is defined"
+
+    - name: ensure dir
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory 
+      loop: "{{ DATA_FOLDERS.split(',') }}"
+      when: "DATA_FOLDERS is defined"
+
 
     - name: Clone Astraea Project
       ansible.builtin.git:
@@ -62,20 +56,6 @@
       register: output_zookeeper_script
       when: inventory_hostname == groups[TARGET_GROUP][0]
     
-    - name: remove old broker folder
-      ansible.builtin.file:
-        path: "/data/kafka"
-        state: absent
-      become: true
-      become_user: user1001
-
-    - name: ensure dir
-      ansible.builtin.file:
-        path: "/data/kafka"
-        state: directory 
-      become: true
-      become_user: user1001
-
     - name: Launch Apache Kafka on all hosts (execute script)
       ansible.builtin.command: 
         argv:
@@ -87,8 +67,14 @@
         EXPORTER_PORT: "{{ EXPORTER_PORT }}"
         BROKER_JMX_PORT: "{{ JMX_PORT }}"
         JMX_CONFIG_FILE: "{{ JMX_CONFIG_FILE | default('') }}"
-        DATA_FOLDERS: "/data/kafka"
-        USERNAME: "garyparrot"
+        DATA_FOLDERS: "{{ DATA_FOLDERS | default(None) }}"
+        CONFLUENT_BROKER: "{{ CONFLUENT_BROKER | default('false') }}"
+        CPUS: "{{ CPUS | default(None) }}"
+        MEMORY: "{{ MEMORY | default(None) }}"
+        DEVICE_READ_BPS: "{{ DEVICE_READ_BPS | default(None) }}"
+        DEVICE_WRITE_BPS: "{{ DEVICE_WRITE_BPS | default(None) }}"
+        DEVICE_READ_IOPS: "{{ DEVICE_READ_IOPS | default(None) }}"
+        DEVICE_WRITE_IOPS: "{{ DEVICE_WRITE_IOPS | default(None) }}"
       register: kafka_script_output
 
     - name: debug kafka_script_output

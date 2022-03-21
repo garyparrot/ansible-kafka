@@ -1,6 +1,6 @@
 ---
 - hosts: payload_hosts
-  gather_facts: false
+  gather_facts: true
 
   vars_prompt:
     - name: benchmark_name

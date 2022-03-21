@@ -1,8 +1,7 @@
 ---
 - hosts:
     - hosts
-    - local
-  gather_facts: false
+  gather_facts: true
 
   vars_files:
     - ../common-variables.yml
@@ -41,14 +40,14 @@
     - name: Template the prometheus config file
       ansible.builtin.template:
         src: ../templates/prometheus.yml
-        dest: /home/garyparrot/prometheus.yml
+        dest: "/home/{{ ansible_user_id }}/prometheus.yml"
 
     - name: Refresh prometheus on first host
       ansible.builtin.command:
         argv:
           - "{{ PROMETHEUS_SCRIPT }}"
           - "refresh"
-          - "/home/garyparrot/prometheus.yml"
+          - "/home/{{ ansible_user_id }}/prometheus.yml"
       environment:
         PROMETHEUS_PORT: "{{ PROMETHEUS_PORT }}"
         scrape_interval: "500ms"

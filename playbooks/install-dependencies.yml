@@ -1,0 +1,8 @@
+---
+- hosts: hosts
+  gather_facts: true
+  vars_files:
+    - ../common-variables.yml
+  tasks:
+    - name: install
+      import_tasks: ../tasks/install-dependencies.yml

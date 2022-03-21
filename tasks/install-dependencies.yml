@@ -1,0 +1,31 @@
+- name: Install python & pip on remote
+  ansible.builtin.package:
+    name:
+      - python
+      - pip
+      - acl
+    state: present
+  when: DO_PACKAGE_INSTALL
+  become: true
+
+- ansible.builtin.package:
+    name:
+      - python-is-python3
+    state: present
+  when: DO_PACKAGE_INSTALL
+  become: true
+
+- name: fuck Python
+  ansible.builtin.pip:
+    name: "requests"
+  when: DO_PACKAGE_INSTALL
+
+- name: fuck Python
+  ansible.builtin.pip:
+    name: "setuptools"
+  when: DO_PACKAGE_INSTALL
+  
+- name: Install python docker library on remote
+  ansible.builtin.pip:
+    name: "docker==4.1.0"
+  when: DO_PACKAGE_INSTALL
