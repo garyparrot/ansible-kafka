@@ -1,0 +1,15 @@
+---
+- hosts: hosts
+  gather_facts: true
+
+  vars_files:
+    - ../common-variables.yml
+
+  tasks:
+    - name: debug data folders
+      ansible.builtin.debug:
+        var: DATA_FOLDERS
+
+    - name: remove old kafka cluster
+      import_tasks: ../tasks/remove-cluster.yml
+

@@ -16,7 +16,8 @@
         msg:
             - "Boostrap servers = {{ groups[TARGET_GROUP] | product([BROKER_PORT]) | map('join', ':') | join(',') }}"
             - "Jmx servers = {{ groups[TARGET_GROUP] | product([JMX_PORT]) | map('join', ':') | join(',') }}"
-            - "Exporter = {{ groups[TARGET_GROUP] | product([EXPORTER_PORT]) | map('join', ':') | join(',') }}"
+            - "Kafka exporters = {{ groups[TARGET_GROUP] | product([EXPORTER_PORT]) | map('join', ':') | join(',') }}"
+            - "Node exporters = {{ groups[TARGET_GROUP] | product([NODE_EXPORTER_PORT]) | map('join', ':') | join(',') }}"
             - "Prometheus = http://{{ groups[TARGET_GROUP][0] }}:{{ PROMETHEUS_PORT }}"
             - "Grafana = http://localhost:3000/"
       when: inventory_hostname in groups.local

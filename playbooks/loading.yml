@@ -45,9 +45,9 @@
       ansible.builtin.debug:
         var: topic_name
 
-    - name: Apply loading
-      ansible.builtin.shell: 
-        cmd: >
+    - name: generate command
+      ansible.builtin.set_fact:
+        command: >
             ./gradlew run --args="performance 
             --bootstrap.servers {{ bootstrap_servers }} 
             --producers {{ producers | default(4) }} 
@@ -57,6 +57,15 @@
             --replicas {{ replicas | default("2") }} 
             --run.until {{ run_until | default("1h") }} 
             --topic {{ topic_name }}
+            --specify.broker {{ specify_broker | default("-1") }}
             --throughput {{ throughput | default("5MiB") }}" 
         # "
+    
+    - name: debug command
+      ansible.builtin.debug:
+        var: command
+
+    - name: Apply loading
+      ansible.builtin.shell: 
+        cmd: "{{ command }}"
         chdir: "{{ GIT_LOADING_REPO_DEST }}/{{ inventory_hostname }}"

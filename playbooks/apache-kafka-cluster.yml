@@ -26,13 +26,6 @@
     - name: Remove old instances if necessary 
       import_tasks: ../tasks/remove-cluster.yml
 
-    - name: remove old broker folder
-      ansible.builtin.file:
-        path: "{{ item }}"
-        state: absent
-      loop: "{{ DATA_FOLDERS.split(',') }}"
-      when: "DATA_FOLDERS is defined"
-
     - name: ensure dir
       ansible.builtin.file:
         path: "{{ item }}"
@@ -80,10 +73,6 @@
     - name: debug kafka_script_output
       ansible.builtin.debug:
         var: kafka_script_output
-
-
-    # Generate useful cluster stat
-    - name: Generate cluster summary
-      ansible.builtin.template:
-        src: ../templates/summary.j2
-        dest: /tmp/cluster-summary
+    
+- name: debug useful stuff
+  import_playbook: ./print-info.yml

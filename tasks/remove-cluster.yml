@@ -34,3 +34,10 @@
     force_kill: yes
   loop: "{{ any_zookeeper.stdout_lines }}"
   changed_when: any_kafka.stdout_lines | length > 0 | bool
+
+- name: remove old broker folder
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop: "{{ DATA_FOLDERS.split(',') }}"
+  when: "DATA_FOLDERS is defined"
