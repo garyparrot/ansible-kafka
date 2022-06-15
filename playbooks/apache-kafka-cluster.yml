@@ -33,7 +33,6 @@
       loop: "{{ DATA_FOLDERS.split(',') }}"
       when: "DATA_FOLDERS is defined"
 
-
     - name: Clone Astraea Project
       ansible.builtin.git:
         repo: "{{ GIT_REPO }}"
@@ -64,10 +63,7 @@
         CONFLUENT_BROKER: "{{ CONFLUENT_BROKER | default('false') }}"
         CPUS: "{{ CPUS | default(None) }}"
         MEMORY: "{{ MEMORY | default(None) }}"
-        DEVICE_READ_BPS: "{{ DEVICE_READ_BPS | default(None) }}"
-        DEVICE_WRITE_BPS: "{{ DEVICE_WRITE_BPS | default(None) }}"
-        DEVICE_READ_IOPS: "{{ DEVICE_READ_IOPS | default(None) }}"
-        DEVICE_WRITE_IOPS: "{{ DEVICE_WRITE_IOPS | default(None) }}"
+        HEAP_OPTS: "{{ HEAP_OPTS | default(None) }}"
       register: kafka_script_output
 
     - name: debug kafka_script_output

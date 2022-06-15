@@ -1,6 +1,6 @@
 ---
 - name: Search for Kafka Instance
-  ansible.builtin.command: "docker ps -aq --filter name=broker-*"
+  ansible.builtin.command: "docker ps -aq --filter name=broker-*-*"
   register: any_kafka
 
 - name: Search for Zookeeper

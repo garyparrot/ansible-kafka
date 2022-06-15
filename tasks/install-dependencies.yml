@@ -1,9 +1,10 @@
 - name: Install python & pip on remote
   ansible.builtin.package:
     name:
-      - python
+      - python3
       - pip
       - acl
+      - iperf
     state: present
   when: DO_PACKAGE_INSTALL
   become: true

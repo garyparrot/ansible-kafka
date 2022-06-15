@@ -1,7 +1,7 @@
 ---
 GIT_REPO: https://github.com/garyparrot/astraea.git
-GIT_REPO_BRANCH: temp-fix2
-GIT_REPO_DEST: "/home/{{  ansible_user_id }}/ansible-automation/astraea"
+GIT_REPO_BRANCH: temp-fix3
+GIT_REPO_DEST: "/home/{{ ansible_user_id }}/ansible-automation/astraea-{{ inventory_hostname }}"
 GIT_LOADING_REPO_DEST: "/home/{{ ansible_user_id }}/ansible-automation"
 ZK_IMAGE_NAME: ghcr.io/skiptests/astraea/zookeeper:3.7.0
 DEFAULT_KAFKA_SCRIPT: "{{ GIT_REPO_DEST }}/docker/start_broker.sh"
