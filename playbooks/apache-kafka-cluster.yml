@@ -1,74 +1,76 @@
 ---
-- hosts: hosts
+- hosts: cluster_hosts
   gather_facts: true
 
   vars_files:
     - ../common-variables.yml
+    - ../common-configs.yml
 
   vars:
-    TARGET_GROUP: hosts
-    DO_PACKAGE_INSTALL: "{{ INSTALL_PACKAGES | default(false) }}"
-    JMX_CONFIG_FILE: "{{ GIT_LOADING_REPO_DEST }}/kafka-jmx-exporter.yml"
-    USE_KAFKA_SCRIPT: "{{ KAFKA_SCRIPT | default(DEFAULT_KAFKA_SCRIPT) }}"
+    TARGET_GROUP: cluster_hosts
+    JMX_CONFIG_FILE: "{{ GIT_REPO_BASE_DEST }}/kafka-jmx-exporter.yml"
+    USE_CONFLUENT_BROKER: "{{ CONFLUENT_BROKER | default('false') | bool }}"
 
   pre_tasks:
-    - name: ensure dir
+    - name: ensure base dir exists
       ansible.builtin.file:
-        path: "{{ GIT_LOADING_REPO_DEST }}"
+        path: "{{ GIT_REPO_BASE_DEST }}"
         state: directory 
 
-    - name: prepare jmx exporter config file
+    - name: prepare JMX exporter config file
       ansible.builtin.template:
         src: ../templates/kafka-jmx-exporter.yml
         dest: "{{ JMX_CONFIG_FILE }}"
 
   tasks:
-    - name: Remove old instances if necessary 
+    - name: remove old cluster instance if one exists
       import_tasks: ../tasks/remove-cluster.yml
 
-    - name: ensure dir
+    - name: ensure data directories exists
       ansible.builtin.file:
         path: "{{ item }}"
         state: directory 
       loop: "{{ DATA_FOLDERS.split(',') }}"
       when: "DATA_FOLDERS is defined"
 
-    - name: Clone Astraea Project
+    - name: ensure astraea project exists and move to the newest progress
       ansible.builtin.git:
         repo: "{{ GIT_REPO }}"
         dest: "{{ GIT_REPO_DEST }}"
         update: yes
         version: "{{ GIT_REPO_BRANCH }}"
 
-    # Launch servers
-    - name: Launch Zookeeper on specific host (execute script)
+    - name: launch Zookeeper on specific host (execute script)
       ansible.builtin.command: "{{ ZOOKEEPER_SCRIPT }}"
       environment:
         ZOOKEEPER_PORT: "{{ ZK_PORT }}"
       register: output_zookeeper_script
       when: inventory_hostname == groups[TARGET_GROUP][0]
     
-    - name: Launch Apache Kafka on all hosts (execute script)
+    - name: launch Kafka on all hosts (execute script)
       ansible.builtin.command: 
         argv:
-          - "{{ USE_KAFKA_SCRIPT }}"
+          - "{{ KAFKA_SCRIPT }}"
           - "zookeeper.connect={{ groups[TARGET_GROUP][0] }}:{{ ZK_PORT }}"
-          - "confluent.balancer.heal.uneven.load.trigger=ANY_UNEVEN_LOAD"
+          - "{{ CONFLUENT_BALANCER_HEAL_TRIGGER if USE_CONFLUENT_BROKER }}"
       environment:
         BROKER_PORT: "{{ BROKER_PORT }}"
         EXPORTER_PORT: "{{ EXPORTER_PORT }}"
         BROKER_JMX_PORT: "{{ JMX_PORT }}"
         JMX_CONFIG_FILE: "{{ JMX_CONFIG_FILE | default('') }}"
         DATA_FOLDERS: "{{ DATA_FOLDERS | default(None) }}"
-        CONFLUENT_BROKER: "{{ CONFLUENT_BROKER | default('false') }}"
-        CPUS: "{{ CPUS | default(None) }}"
-        MEMORY: "{{ MEMORY | default(None) }}"
-        HEAP_OPTS: "{{ HEAP_OPTS | default(None) }}"
-      register: kafka_script_output
+        CONFLUENT_BROKER: "{{ USE_CONFLUENT_BROKER | default('false') }}"
+      register: output_kafka_script
 
-    - name: debug kafka_script_output
+    - name: debug zookeeper script
       ansible.builtin.debug:
-        var: kafka_script_output
+        var: output_zookeeper_script
+      when: DEBUG_MESSAGE
+
+    - name: debug kafka script
+      ansible.builtin.debug:
+        var: output_kafka_script
+      when: DEBUG_MESSAGE
     
-- name: debug useful stuff
+- name: import the friendly print-info playbook
   import_playbook: ./print-info.yml

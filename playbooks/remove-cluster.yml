@@ -1,12 +1,12 @@
 ---
-- hosts: hosts
+- hosts: cluster_hosts
   gather_facts: true
 
   vars_files:
     - ../common-variables.yml
 
   tasks:
-    - name: debug data folders
+    - name: list data folders
       ansible.builtin.debug:
         var: DATA_FOLDERS
 

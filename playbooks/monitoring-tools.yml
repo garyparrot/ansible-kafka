@@ -1,76 +1,74 @@
 ---
 - hosts:
-    - hosts
+    - cluster_hosts
+    - local
   gather_facts: true
 
   vars_files:
     - ../common-variables.yml
 
   vars:
-    TARGET_GROUP: "hosts"
+    TARGET_GROUP: "cluster_hosts"
+    CONFIG_PATH: "{{ GIT_REPO_BASE_DEST }}/prometheus.yml"
 
   tasks:
-    - name: Clone Astraea Project
+    - name: clone astraea project and move to the newest commit
       ansible.builtin.git:
         repo: "{{ GIT_REPO }}"
         dest: "{{ GIT_REPO_DEST }}"
         update: yes
         version: "{{ GIT_REPO_BRANCH }}"
 
-    - name: stop old node exporter
+    - name: stop old node exporters
       ansible.builtin.import_tasks: ../tasks/remove-monitoring-tools.yml
       
-    - name: Launch Node Exporter on all host
+    - name: launch node exporter on all hosts
       ansible.builtin.command:
         argv:
           - "{{ NODE_EXPORTER_SCRIPT }}"
       environment:
         PORT: "{{ NODE_EXPORTER_PORT }}"
-      when: inventory_hostname in groups.hosts
+      when: inventory_hostname in groups[TARGET_GROUP]
 
-    - name: Launch Prometheus on first host
-      ansible.builtin.command:
-        argv:
-          - "{{ PROMETHEUS_SCRIPT }}"
-          - "start"
-      environment:
-        PROMETHEUS_PORT: "{{ PROMETHEUS_PORT }}"
-      when: inventory_hostname == groups[TARGET_GROUP][0]
-
-    - name: Template the prometheus config file
+    - name: template the Prometheus config file
       ansible.builtin.template:
         src: ../templates/prometheus.yml
-        dest: "/home/{{ ansible_user_id }}/prometheus.yml"
+        dest: "{{ CONFIG_PATH }}"
 
-    - name: Refresh prometheus on first host
-      ansible.builtin.command:
-        argv:
-          - "{{ PROMETHEUS_SCRIPT }}"
-          - "refresh"
-          - "/home/{{ ansible_user_id }}/prometheus.yml"
+    - name: launch Prometheus on the first host
+      community.docker.docker_container:
+        name: "prometheus-{{ PROMETHEUS_PORT }}"
+        image: prom/prometheus:v2.32.1
+        state: started
+        published_ports:
+          - "{{ PROMETHEUS_PORT }}:9090"
+        volumes:
+          - "{{ CONFIG_PATH }}:/etc/prometheus/prometheus.yml"
+
       environment:
         PROMETHEUS_PORT: "{{ PROMETHEUS_PORT }}"
-        scrape_interval: "500ms"
-        scrape_timeout: "500ms"
       when: inventory_hostname == groups[TARGET_GROUP][0]
 
-    - name: Launch Grafana on localhost
+    - name: launch Grafana on localhost
       ansible.builtin.command:
         argv:
           - "{{ GRAFANA_SCRIPT }}"
           - "start"
-      when: inventory_hostname in groups.local
+      when: inventory_hostname in groups["local"]
 
-    - name: Setup prometheus source for local Grafana 
+    - name: test if cluster is on 
+      ansible.builtin.wait_for:
+        host: "{{ ansible_host }}" 
+        port: 3000
+        timeout: 5
+        msg: "wait Grafana up timeout"
+      when: inventory_hostname in groups["local"]
+      ignore_errors: yes
+
+    - name: setup Prometheus data source for the local Grafana
       ansible.builtin.command:
           "{{ GRAFANA_SCRIPT }} add_prom_source admin:admin prometheus http://{{ groups[TARGET_GROUP][0] }}:{{ PROMETHEUS_PORT }}/"
-      when: inventory_hostname in groups.local
+      when: inventory_hostname in groups["local"]
 
-    - name: debug
-      ansible.builtin.debug:
-        msg:
-            - "Exporter Port: {{ EXPORTER_PORT }}"
-            - "Bootstrap servers: {{ groups[TARGET_GROUP] | product([BROKER_PORT]) | map('join', ':') | join(',') }}"
-            - "Prometheus : http://{{ groups[TARGET_GROUP][0] }}:{{ PROMETHEUS_PORT }}/"
-            - "Grafana : http://localhost:3000/"
-      when: inventory_hostname in groups.local
+- name: import the friendly print-info playbook
+  import_playbook: ./print-info.yml

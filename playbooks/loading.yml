@@ -11,20 +11,11 @@
     - ../common-variables.yml
 
   vars:
-    BROKER_GROUP: hosts
+    BROKER_GROUP: cluster_hosts
     DO_PACKAGE_INSTALL: "{{ INSTALL_PACKAGES | default(false) | bool }}"
 
-  pre_tasks:
-    - name: Install Java
-      ansible.builtin.package:
-        name:
-          - openjdk-11-jre-headless
-        state: present
-      when: DO_PACKAGE_INSTALL
-      become: yes
-
   tasks:
-    - name: Clone Astraea Project
+    - name: clone astraea project
       ansible.builtin.git:
         repo: "{{ GIT_REPO }}"
         dest: "{{ GIT_LOADING_REPO_DEST }}/{{ inventory_hostname }}"
@@ -59,13 +50,13 @@
             --topic {{ topic_name }}
             --specify.broker {{ specify_broker | default("-1") }}
             --throughput {{ throughput | default("5MiB") }}" 
-        # "
+            # "
     
     - name: debug command
       ansible.builtin.debug:
         var: command
 
-    - name: Apply loading
+    - name: apply loading
       ansible.builtin.shell: 
         cmd: "{{ command }}"
         chdir: "{{ GIT_LOADING_REPO_DEST }}/{{ inventory_hostname }}"

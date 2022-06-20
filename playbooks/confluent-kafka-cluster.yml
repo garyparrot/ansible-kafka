@@ -1,11 +1,11 @@
 ---
-- hosts: hosts
+- hosts: cluster_hosts
   gather_facts: false
 
   vars_files:
     - ../common-variables.yml
 
-- name: Import playbook
+- name: import astraea playbook
   ansible.builtin.import_playbook: ./apache-kafka-cluster.yml
   vars:
     CONFLUENT_BROKER: "true"

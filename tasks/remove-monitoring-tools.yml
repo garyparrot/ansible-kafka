@@ -1,9 +1,9 @@
 ---
-- name: Search for node exporter instance
+- name: Search for node exporter instances
   ansible.builtin.command: "docker ps -aq --filter ancestor=prom/node-exporter"
   register: any_node_exporter
 
-- name: Search for prometheus
+- name: search for Prometheus
   ansible.builtin.command: "docker ps -aq --filter ancestor=prom/prometheus"
   register: any_prometheus
 

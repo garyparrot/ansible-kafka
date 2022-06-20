@@ -1,17 +1,43 @@
 ---
+
+# show debug message
+DEBUG_MESSAGE: false
+
+# The astraea repository url
 GIT_REPO: https://github.com/garyparrot/astraea.git
-GIT_REPO_BRANCH: temp-fix3
-GIT_REPO_DEST: "/home/{{ ansible_user_id }}/ansible-automation/astraea-{{ inventory_hostname }}"
-GIT_LOADING_REPO_DEST: "/home/{{ ansible_user_id }}/ansible-automation"
+
+# The repository branch
+GIT_REPO_BRANCH: main
+
+# The remote filesystem path for the cloned astraea repository
+GIT_REPO_BASE_DEST: "/home/{{ ansible_user_id }}/ansible-automation"
+GIT_REPO_DEST: "{{ GIT_REPO_BASE_DEST }}/astraea-{{ inventory_hostname }}"
+
+# The astraea's Zookeeper image URI
 ZK_IMAGE_NAME: ghcr.io/skiptests/astraea/zookeeper:3.7.0
-DEFAULT_KAFKA_SCRIPT: "{{ GIT_REPO_DEST }}/docker/start_broker.sh"
+
+# The remote filesystem path to the astraea's kafka startup script
+KAFKA_SCRIPT: "{{ GIT_REPO_DEST }}/docker/start_broker.sh"
+
+# The astraea's Kafka image URI
 KAFKA_IMAGE_NAME: ghcr.io/skiptests/astraea/broker:2.8.1
+
+# The remote filesystem path to the astraea's zookeeper startup script
 ZOOKEEPER_SCRIPT: "{{ GIT_REPO_DEST }}/docker/start_zookeeper.sh"
+
+# The remote filesystem path to the astraea's prometheus startup script
 PROMETHEUS_SCRIPT: "{{ GIT_REPO_DEST }}/docker/start_prometheus.sh"
+
+# The remote filesystem path to the astraea's node exporter startup script
 NODE_EXPORTER_SCRIPT: "{{ GIT_REPO_DEST }}/docker/start_node_exporter.sh"
+
+# The local filesystem path to the astraea's grafana startup script
 GRAFANA_SCRIPT: "{{ GIT_REPO_DEST }}/docker/start_grafana.sh"
 
+# A series of static port numbers generated with fixed seed random shuffle.
 RANDOM_PORTS: "{{ range(10000, 30000) | shuffle(seed='0xCAFEBABE') }}"
+
+# Port for each services
 ZK_PORT:             "{{ RANDOM_PORTS[0] }}"
 BROKER_PORT:         "{{ RANDOM_PORTS[1] }}"
 EXPORTER_PORT:       "{{ RANDOM_PORTS[2] }}"
