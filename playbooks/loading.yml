@@ -2,61 +2,52 @@
 - hosts: payload_hosts
   gather_facts: true
 
-  vars_prompt:
-    - name: benchmark_name
-      prompt: Name this benchmark (this name will be prefix to every created topic)
-      private: no
+  # vars_prompt:
+  #   - name: benchmark_name
+  #     prompt: Name this benchmark (this name will be prefix to every created topic)
+  #     private: no
 
   vars_files:
     - ../common-variables.yml
 
   vars:
     BROKER_GROUP: cluster_hosts
-    DO_PACKAGE_INSTALL: "{{ INSTALL_PACKAGES | default(false) | bool }}"
 
   tasks:
     - name: clone astraea project
       ansible.builtin.git:
         repo: "{{ GIT_REPO }}"
-        dest: "{{ GIT_LOADING_REPO_DEST }}/{{ inventory_hostname }}"
+        dest: "{{ GIT_REPO_BASE_DEST }}/{{ inventory_hostname }}"
         update: yes
         version: "{{ GIT_REPO_BRANCH }}"
 
     - name: set fact, generate the bootstrap server address list
       ansible.builtin.set_fact:
         bootstrap_servers: "{{ groups[BROKER_GROUP] | product([BROKER_PORT]) | map('join', ':') | join(',') }}" 
-        random_suffix: "{{ range(1000000, 9999999) | random }}" 
-
-    - name: set fact
-      ansible.builtin.set_fact:
-        topic_name: "{{ inventory_hostname }}-{{ benchmark_name }}-{{ suffix | default(random_suffix) }}"
-      when: topic_name is not defined
 
     - name: debug topic name
       ansible.builtin.debug:
-        var: topic_name
-
-    - name: generate command
-      ansible.builtin.set_fact:
-        command: >
-            ./gradlew run --args="performance 
-            --bootstrap.servers {{ bootstrap_servers }} 
-            --producers {{ producers | default(4) }} 
-            --consumers {{ consumers | default(8) }} 
-            --record.size {{ record_size | default("10KiB") }} 
-            --partitions {{ partitions | default(15) }} 
-            --replicas {{ replicas | default("2") }} 
-            --run.until {{ run_until | default("1h") }} 
-            --topic {{ topic_name }}
-            --specify.broker {{ specify_broker | default("-1") }}
-            --throughput {{ throughput | default("5MiB") }}" 
-            # "
+        msg:
+          - "topic_name: {{ topic_name }}"
+          - "partitions: {{ partitions }}"
+          - "replicas  : {{ replicas }}"
+          - "throughput: {{ throughput }}"
     
-    - name: debug command
-      ansible.builtin.debug:
-        var: command
-
-    - name: apply loading
-      ansible.builtin.shell: 
-        cmd: "{{ command }}"
-        chdir: "{{ GIT_LOADING_REPO_DEST }}/{{ inventory_hostname }}"
+    - name: launch the worker
+      community.docker.docker_container:
+        name: "{{ inventory_hostname }}"
+        image: ghcr.io/skiptests/astraea/app:main
+        state: started
+        recreate: yes
+        command: 
+          - /opt/astraea/bin/app
+          - performance
+          - "--bootstrap.servers {{ bootstrap_servers }}"
+          - "--producers 2"
+          - "--consumers 4"
+          - "--record.size 10KiB"
+          - "--topic {{ topic_name }}"
+          - "--partitions {{ partitions }}"
+          - "--replicas {{ replicas }}"
+          - "--run.until 256h"
+          - "--throughput {{ throughput }}"
