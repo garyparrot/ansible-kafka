@@ -7,11 +7,12 @@ DEBUG_MESSAGE: false
 GIT_REPO: https://github.com/garyparrot/astraea.git
 
 # The repository branch
-GIT_REPO_BRANCH: main
+GIT_REPO_BRANCH: ansible
 
 # The remote filesystem path for the cloned astraea repository
 GIT_REPO_BASE_DEST: "/home/{{ ansible_user_id }}/ansible-automation"
 GIT_REPO_DEST: "{{ GIT_REPO_BASE_DEST }}/astraea-{{ inventory_hostname }}"
+BALANCER_CONFIG_FILE: "{{ GIT_REPO_BASE_DEST }}/balancer.properties"
 
 # The astraea's Zookeeper image URI
 ZK_IMAGE_NAME: ghcr.io/skiptests/astraea/zookeeper:3.7.0
@@ -37,6 +38,12 @@ GRAFANA_SCRIPT: "{{ GIT_REPO_DEST }}/docker/start_grafana.sh"
 # A series of static port numbers generated with fixed seed random shuffle.
 RANDOM_PORTS: "{{ range(10000, 30000) | shuffle(seed='0xCAFEBABE') }}"
 
+# broker id
+BROKER_ID: "{{ lookup('ansible.utils.index_of', groups['cluster_hosts'], 'eq', inventory_hostname) }}"
+
+# JMX list
+JMX_FORMAT: "service:jmx:rmi://\\1/jndi/rmi://\\1/jmxrmi"
+
 # Port for each services
 ZK_PORT:             "{{ RANDOM_PORTS[0] }}"
 BROKER_PORT:         "{{ RANDOM_PORTS[1] }}"
@@ -44,3 +51,4 @@ EXPORTER_PORT:       "{{ RANDOM_PORTS[2] }}"
 JMX_PORT:            "{{ RANDOM_PORTS[3] }}"
 NODE_EXPORTER_PORT:  "{{ RANDOM_PORTS[4] }}"
 PROMETHEUS_PORT:     "{{ RANDOM_PORTS[5] }}"
+

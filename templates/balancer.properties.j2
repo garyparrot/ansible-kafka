@@ -1,0 +1,7 @@
+bootstrap.servers={% for host in groups['cluster_hosts'] -%}
+    {{host}}:{{BROKER_PORT}}{{ "," if not loop.last else "" }}
+{%- endfor %}
+
+jmx.servers={%- for host in groups['cluster_hosts'] -%}
+    {{ groups['cluster_hosts'].index(host) }}@service:jmx:rmi://{{ host }}:{{ JMX_PORT }}/jndi/rmi://{{ host }}:{{ JMX_PORT }}/jmxrmi{{ "," if not loop.last else "" }}
+{%- endfor -%}

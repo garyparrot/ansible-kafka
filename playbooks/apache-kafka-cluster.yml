@@ -51,8 +51,9 @@
       ansible.builtin.command: 
         argv:
           - "{{ KAFKA_SCRIPT }}"
+          - "broker.id={{ BROKER_ID }}"
           - "zookeeper.connect={{ groups[TARGET_GROUP][0] }}:{{ ZK_PORT }}"
-          - "{{ CONFLUENT_BALANCER_HEAL_TRIGGER if USE_CONFLUENT_BROKER }}"
+          - "{{ CONFLUENT_BALANCER_HEAL_TRIGGER if USE_CONFLUENT_BROKER else '' }}"
       environment:
         BROKER_PORT: "{{ BROKER_PORT }}"
         EXPORTER_PORT: "{{ EXPORTER_PORT }}"

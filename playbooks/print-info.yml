@@ -2,7 +2,7 @@
 - hosts:
     - cluster_hosts
     - local
-  gather_facts: false
+  gather_facts: true
 
   vars_files:
     - ../common-variables.yml
@@ -11,6 +11,11 @@
     TARGET_GROUP: cluster_hosts
 
   tasks:
+    - name: prepare balancer.properties
+      ansible.builtin.template:
+        src: ../templates/balancer.properties.j2
+        dest: "{{ BALANCER_CONFIG_FILE }}"
+
     - name: test if cluster is on 
       ansible.builtin.wait_for:
         host: "{{ ansible_host }}" 
