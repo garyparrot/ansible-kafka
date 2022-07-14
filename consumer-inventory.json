@@ -1,0 +1,588 @@
+{
+  "loading-consumer-hosts": {
+    "hosts": {
+      "host0": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181"
+      },
+      "host1": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182"
+      }
+    }
+  },
+  "loading-consumer": {
+    "hosts": {
+      "loading0": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-de7045585d664bac8b2f56397971afa4",
+        "throttle": "0Byte"
+      },
+      "loading1": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-987bf670505648119991b9a7ea2fd41f",
+        "throttle": "0Byte"
+      },
+      "loading2": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-12aaeb97cf584ffabf706beacab23886",
+        "throttle": "424365Byte"
+      },
+      "loading3": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-86739bce727e4faeb1ca29c2aaf3d5c9",
+        "throttle": "1226925Byte"
+      },
+      "loading4": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-394d5531491148c58446fefe7bfcf4ea",
+        "throttle": "1299584Byte"
+      },
+      "loading5": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-5c507224a7134d599861874ac1d02efd",
+        "throttle": "1810720Byte"
+      },
+      "loading6": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-1d6990e940ca46ba8462f82aa7fa2a33",
+        "throttle": "1865499Byte"
+      },
+      "loading7": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-f40b1efcfd884288b240da06f1b85546",
+        "throttle": "2218136Byte"
+      },
+      "loading8": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-1b5263fd40cc47a9be12e03d375e3528",
+        "throttle": "2441313Byte"
+      },
+      "loading9": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-0900ab66264f4484baaf6bc4da712787",
+        "throttle": "2679184Byte"
+      },
+      "loading10": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-95b804f68209420b876be2c2330ae953",
+        "throttle": "2813820Byte"
+      },
+      "loading11": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-674168e82fd848dfb0fba7ad9bcaab29",
+        "throttle": "2894046Byte"
+      },
+      "loading12": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-c0574c6fbe6d4d2e81817b1da95211cd",
+        "throttle": "3292500Byte"
+      },
+      "loading13": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-f6a0a89f5a8d4a00bc003fbc1f850515",
+        "throttle": "3394482Byte"
+      },
+      "loading14": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-9f44aeafb30b428bb0f9c1bf90bc2e92",
+        "throttle": "3451804Byte"
+      },
+      "loading15": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-972d2ee0c3d04d86a3bdc37bb965b86b",
+        "throttle": "3457872Byte"
+      },
+      "loading16": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-5ca819ec11454f6d823de5187da78c42",
+        "throttle": "3471724Byte"
+      },
+      "loading17": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-89d7347439774f53a28b0781ddc6c01c",
+        "throttle": "3797368Byte"
+      },
+      "loading18": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-5a6c62454a7340c3944d94bf3b5edc05",
+        "throttle": "3812760Byte"
+      },
+      "loading19": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-ee813a840c2742b3ad35a6b172a33027",
+        "throttle": "3904952Byte"
+      },
+      "loading20": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-ae9ec4f3c57647268c6ba5f397a78acb",
+        "throttle": "3970032Byte"
+      },
+      "loading21": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-7bf2ff5f6920443f979590cb2b977a63",
+        "throttle": "3975642Byte"
+      },
+      "loading22": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-861f65294663496da747cd6382bebb06",
+        "throttle": "3994952Byte"
+      },
+      "loading23": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-3ef7344986744f17a837b7c2910bfdd9",
+        "throttle": "4274788Byte"
+      },
+      "loading24": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-c691510047c54dc4bdee43e9b004bbcc",
+        "throttle": "4652268Byte"
+      },
+      "loading25": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-4e2b6d4876d7443a8b6a6594521cf2c6",
+        "throttle": "4865439Byte"
+      },
+      "loading26": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-c048f1a4d9e7411aac595d9abbe28e9b",
+        "throttle": "4970031Byte"
+      },
+      "loading27": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-986a0aa4b75c4cf79d22fb686eab8c1b",
+        "throttle": "5185407Byte"
+      },
+      "loading28": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-945e9fa9d53b401fa93f7bd58c77db0c",
+        "throttle": "5370384Byte"
+      },
+      "loading29": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-fe361dee04e24efea2ed2f5937949c8c",
+        "throttle": "5393649Byte"
+      },
+      "loading30": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-b86c90e648d743159a49dddecc4c0b66",
+        "throttle": "6186668Byte"
+      },
+      "loading31": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-dfc7af6a06fe4b56a34ab3f615ead3d8",
+        "throttle": "6450720Byte"
+      },
+      "loading32": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-b305636d01c441829ea52d4ce2d9483c",
+        "throttle": "6754224Byte"
+      },
+      "loading33": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-fc76c14e46944774b0891af9ce6d2428",
+        "throttle": "7288599Byte"
+      },
+      "loading34": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-68a2161bb1fa4f6a94c3cfe52eaea4f3",
+        "throttle": "7439070Byte"
+      },
+      "loading35": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-de181f3979e0409ca7fda753533d6df7",
+        "throttle": "7810592Byte"
+      },
+      "loading36": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-9e149a1f58a8427e8cef4d6f753076bf",
+        "throttle": "7894515Byte"
+      },
+      "loading37": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-b41abbb16f8348e9b13bf1cfde7eb977",
+        "throttle": "8985656Byte"
+      },
+      "loading38": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-d99075a94cd24733996cdaa0676b98b0",
+        "throttle": "9061671Byte"
+      },
+      "loading39": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-6831e8213cb94d70846081764c5914f0",
+        "throttle": "9843648Byte"
+      },
+      "loading40": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-8db7d4c69560420f92348270f4517e13",
+        "throttle": "10238620Byte"
+      },
+      "loading41": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-1c7f2de63ff5444faed3ed5cda5696e8",
+        "throttle": "11749430Byte"
+      },
+      "loading42": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-0424154035424e9e83a24efec052bb94",
+        "throttle": "11805400Byte"
+      },
+      "loading43": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-c8e1883e8656432490c2854d3faf7cc8",
+        "throttle": "12652080Byte"
+      },
+      "loading44": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-9d7265ef8823469e8ea2a205ea252b46",
+        "throttle": "12794830Byte"
+      },
+      "loading45": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-ab791c609648400cb361c6c8dbd7dea2",
+        "throttle": "12891630Byte"
+      },
+      "loading46": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-dde1d44abccd431294e1492e2c2d415f",
+        "throttle": "13087530Byte"
+      },
+      "loading47": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-dd5999cf545247e09ba19a160ef07628",
+        "throttle": "13348580Byte"
+      },
+      "loading48": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-e855d0ac2f8d41bd8b757cf31c424e57",
+        "throttle": "13374760Byte"
+      },
+      "loading49": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-8fac403e8bd24b46bf811bc2b90e897c",
+        "throttle": "13424480Byte"
+      },
+      "loading50": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-ecce930b14be43c1acf4975a444dd33d",
+        "throttle": "13475890Byte"
+      },
+      "loading51": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-804f1f19c11a48eb9b197ce3663b1c07",
+        "throttle": "14421890Byte"
+      },
+      "loading52": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-e439b97327fb4f88a87888f21c235910",
+        "throttle": "15039450Byte"
+      },
+      "loading53": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-eff59355b54e483c9ed804ec0f4ad0b9",
+        "throttle": "15166400Byte"
+      },
+      "loading54": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-7f2ca2c0c0f945f790cb852cf65f6ac9",
+        "throttle": "15644290Byte"
+      },
+      "loading55": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-d7657fd1f8b34448bf3a96f2bedb75cc",
+        "throttle": "15882010Byte"
+      },
+      "loading56": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-bcc71ec27d484c4582af19175a7dc2fe",
+        "throttle": "16148350Byte"
+      },
+      "loading57": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-4e5d901a2ae84d558576d6571fff26e2",
+        "throttle": "16290740Byte"
+      },
+      "loading58": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-b061937e17b14249ac933e00b8beecf5",
+        "throttle": "18905740Byte"
+      },
+      "loading59": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-6dfc52cd4510450cbf26bd2726dc672e",
+        "throttle": "19370890Byte"
+      },
+      "loading60": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "LongRun-06b6122721924ec499366d33f1dce1ab",
+        "throttle": "19423360Byte"
+      },
+      "loading61": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "LongRun-31e150ab5b3d4a37a93621ce7a0444fa",
+        "throttle": "20027050Byte"
+      },
+      "loading62": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-63e3e8c9b1d84e43bae4ed19368ecca3",
+        "throttle": "21167380Byte"
+      },
+      "loading63": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-f6ad7909e0b04b6b804bf336e7c26852",
+        "throttle": "21374770Byte"
+      },
+      "loading64": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-a12710a085c34952a93a117e35fac539",
+        "throttle": "22499520Byte"
+      },
+      "loading65": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-b5c28a0b11aa4d4aa877760423e132c1",
+        "throttle": "22914430Byte"
+      },
+      "loading66": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-fddb47ce89c34772bd90371f1751ecaa",
+        "throttle": "23443880Byte"
+      },
+      "loading67": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-0c519ab8240c49ec915b6c4bb5704bc7",
+        "throttle": "24092200Byte"
+      },
+      "loading68": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-e99c419950b445258d9359f6e95bc15a",
+        "throttle": "24219270Byte"
+      },
+      "loading69": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-a4a52a93a2e744aaa71afc2bc1d9a4f3",
+        "throttle": "24669800Byte"
+      },
+      "loading70": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-a76857b563af4d64b288bb330f44f5c7",
+        "throttle": "25628520Byte"
+      },
+      "loading71": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "LongRun-d23b3694cf0a491ca9123e0dfe8f342d",
+        "throttle": "26148650Byte"
+      },
+      "loading72": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-2b141f7044704989af8c30e378a1e4c9",
+        "throttle": "26172430Byte"
+      },
+      "loading73": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "LongRun-f85dc2e2fc2b47528342eb5011836538",
+        "throttle": "26551860Byte"
+      },
+      "loading74": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-f6f95dfe2b9c4557a2fecff16af42f94",
+        "throttle": "30405460Byte"
+      },
+      "loading75": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-fd4747e00db54a0dbd27284aae0e6a5d",
+        "throttle": "36960410Byte"
+      },
+      "loading76": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-7afe1512d852412783e258c2e8d88f1a",
+        "throttle": "37709930Byte"
+      },
+      "loading77": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-30e536a22cc2472d91d2cc58c3a14a24",
+        "throttle": "42783170Byte"
+      },
+      "loading78": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-10d16162e1964fadb47722ec183353ad",
+        "throttle": "42805540Byte"
+      },
+      "loading79": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "LongRun-5858d04609b64565b565691f9a8047ca",
+        "throttle": "43361280Byte"
+      },
+      "loading80": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-3cc3c179c95449d195fad70b55c2992e",
+        "throttle": "46360590Byte"
+      },
+      "loading81": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-36d25fefc2754787828e2ad915d81744",
+        "throttle": "51256610Byte"
+      },
+      "loading82": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-dbb3d3279029435b9a92abff8b94baee",
+        "throttle": "56576410Byte"
+      },
+      "loading83": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-6b9db589fdb84ff2b7ee419442f84207",
+        "throttle": "65191180Byte"
+      },
+      "loading84": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-95d5b08cef6e4d9ba4eacb865110edd5",
+        "throttle": "65598610Byte"
+      },
+      "loading85": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "LongRun-031ec93f6d6c491590f9ef462c7921b4",
+        "throttle": "68350720Byte"
+      },
+      "loading86": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-7641b15145a34b5d9594c7b81b672a4c",
+        "throttle": "68716810Byte"
+      },
+      "loading87": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "LongRun-88df9a5e791b40ed8751d8fce4ba46f9",
+        "throttle": "71432820Byte"
+      },
+      "loading88": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-8684f56e762c4d9e81893918cced524c",
+        "throttle": "76916980Byte"
+      },
+      "loading89": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "AdHoc-e959341990294bcc9ccf37215f9542eb",
+        "throttle": "77753500Byte"
+      },
+      "loading90": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-bc807ef9279e43808ead24b79aa20955",
+        "throttle": "85252360Byte"
+      },
+      "loading91": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "LongRun-0f3500e244bb40ce8344199e02bcb3a1",
+        "throttle": "91626640Byte"
+      },
+      "loading92": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "LongRun-39330ffb0e7a496dad54dd9df9840c2f",
+        "throttle": "120183000Byte"
+      },
+      "loading93": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic_name": "LongRun-4bcbc5fd74764243bf5155f15a920384",
+        "throttle": "122114100Byte"
+      },
+      "loading94": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic_name": "AdHoc-5b47039ce45d4ae5a7e2053992f07d18",
+        "throttle": "134930500Byte"
+      }
+    }
+  }
+}

@@ -1,4 +1,7 @@
 ---
+- name: shutdown loading
+  import_playbook: ./stop-loading.yml
+
 - hosts: cluster_hosts
   gather_facts: true
 
@@ -61,6 +64,8 @@
         JMX_CONFIG_FILE: "{{ JMX_CONFIG_FILE | default('') }}"
         DATA_FOLDERS: "{{ DATA_FOLDERS | default(None) }}"
         CONFLUENT_BROKER: "{{ USE_CONFLUENT_BROKER | default('false') }}"
+        HEAP_OPTS: "-Xmx16G -Xms16G"
+
       register: output_kafka_script
 
     - name: debug zookeeper script

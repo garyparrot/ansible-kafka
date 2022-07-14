@@ -1,0 +1,5 @@
+- name: stop worker
+  community.docker.docker_container:
+    name: "{{ inventory_hostname }}"
+    image: ghcr.io/skiptests/astraea/app:main
+    state: stopped

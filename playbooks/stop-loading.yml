@@ -1,0 +1,30 @@
+---
+- hosts: loading-producer-hosts, loading-producer
+  gather_facts: false
+  strategy: free
+
+  vars_files:
+    - ../common-variables.yml
+
+  tasks:
+
+    - name: delete named loading
+      community.docker.docker_container:
+        name: "{{ inventory_hostname }}"
+        image: app:0.0.1-SNAPSHOT
+        state: absent
+      when: inventory_hostname in groups["loading-producer"]
+
+    - name: Search for loading
+      ansible.builtin.command: "docker ps -aq --filter name=loading*"
+      register: any_worker
+      when: inventory_hostname in groups["loading-producer-hosts"]
+
+    - name: stop worker
+      community.docker.docker_container:
+        name: "{{ item }}"
+        image: app:0.0.1-SNAPSHOT
+        state: absent
+      loop: "{{ any_worker.stdout_lines }}"
+      changed_when: any_worker.stdout_lines | length > 0 | bool
+      when: inventory_hostname in groups["loading-producer-hosts"]

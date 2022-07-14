@@ -1,6 +1,6 @@
 ---
 - hosts:
-    - cluster_hosts
+    - monitoring
     - local
   gather_facts: true
 
@@ -8,7 +8,7 @@
     - ../common-variables.yml
 
   vars:
-    TARGET_GROUP: "cluster_hosts"
+    TARGET_GROUP: "monitoring"
     CONFIG_PATH: "{{ GIT_REPO_BASE_DEST }}/prometheus.yml"
 
   tasks:

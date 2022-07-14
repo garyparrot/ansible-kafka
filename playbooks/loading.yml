@@ -1,6 +1,7 @@
 ---
-- hosts: payload_hosts
-  gather_facts: true
+- hosts: loading-producer
+  gather_facts: false
+  strategy: free
 
   # vars_prompt:
   #   - name: benchmark_name
@@ -14,12 +15,6 @@
     BROKER_GROUP: cluster_hosts
 
   tasks:
-    - name: clone astraea project
-      ansible.builtin.git:
-        repo: "{{ GIT_REPO }}"
-        dest: "{{ GIT_REPO_BASE_DEST }}/{{ inventory_hostname }}"
-        update: yes
-        version: "{{ GIT_REPO_BRANCH }}"
 
     - name: set fact, generate the bootstrap server address list
       ansible.builtin.set_fact:
@@ -29,25 +24,24 @@
       ansible.builtin.debug:
         msg:
           - "topic_name: {{ topic_name }}"
-          - "partitions: {{ partitions }}"
-          - "replicas  : {{ replicas }}"
-          - "throughput: {{ throughput }}"
+          - "throttle: {{ throttle }}"
     
     - name: launch the worker
       community.docker.docker_container:
         name: "{{ inventory_hostname }}"
-        image: ghcr.io/skiptests/astraea/app:main
+        image: app:0.0.1-SNAPSHOT
         state: started
         recreate: yes
         command: 
-          - /opt/astraea/bin/app
-          - performance
+          - producer
           - "--bootstrap.servers {{ bootstrap_servers }}"
-          - "--producers 2"
-          - "--consumers 4"
-          - "--record.size 10KiB"
-          - "--topic {{ topic_name }}"
-          - "--partitions {{ partitions }}"
-          - "--replicas {{ replicas }}"
-          - "--run.until 256h"
-          - "--throughput {{ throughput }}"
+          - "--batch.size {{ batchSize | default('1MiB') }}"
+          - "--record.size {{ recordSize | default('100KiB') }}"
+          - "--max.in.flight {{ inflight | default('30') }}"
+          - "--buffer.memory {{ bufferMemory | default('30MiB') }}"
+          - "--load.fraction {{ load_map }}"
+          - "--producers {{ producers | default('-1') }}"
+          - "--send.limit 3000000"
+          - "--linger.ms 3000"
+        # - "--topic {{ topic_name }}"
+        # - "--throttle {{ throttle }}"
