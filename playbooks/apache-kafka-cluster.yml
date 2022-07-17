@@ -58,6 +58,7 @@
           - "zookeeper.connect={{ groups[TARGET_GROUP][0] }}:{{ ZK_PORT }}"
           - "{{ CONFLUENT_BALANCER_HEAL_TRIGGER if USE_CONFLUENT_BROKER else '' }}"
       environment:
+        VERSION: "3.1.0"
         BROKER_PORT: "{{ BROKER_PORT }}"
         EXPORTER_PORT: "{{ EXPORTER_PORT }}"
         BROKER_JMX_PORT: "{{ JMX_PORT }}"

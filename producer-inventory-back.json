@@ -648,12 +648,15 @@
         "ansible_host": "192.168.103.181",
         "topic_name": "LongRun-31e150ab5b3d4a37a93621ce7a0444fa",
         "throttle": "40842020Byte",
+        "inflight": "90",
+        "bufferMemory": "90MiB",
         "load_map": "LongRun-31e150ab5b3d4a37a93621ce7a0444fa-0=1436308Byte,LongRun-31e150ab5b3d4a37a93621ce7a0444fa-1=2063747Byte,LongRun-31e150ab5b3d4a37a93621ce7a0444fa-2=856212Byte,LongRun-31e150ab5b3d4a37a93621ce7a0444fa-3=3618791Byte,LongRun-31e150ab5b3d4a37a93621ce7a0444fa-4=646815Byte,LongRun-31e150ab5b3d4a37a93621ce7a0444fa-5=833790Byte,LongRun-31e150ab5b3d4a37a93621ce7a0444fa-6=4329039Byte,LongRun-31e150ab5b3d4a37a93621ce7a0444fa-7=1167519Byte,LongRun-31e150ab5b3d4a37a93621ce7a0444fa-8=2310978Byte,LongRun-31e150ab5b3d4a37a93621ce7a0444fa-9=4797043Byte,LongRun-31e150ab5b3d4a37a93621ce7a0444fa-10=1928130Byte,LongRun-31e150ab5b3d4a37a93621ce7a0444fa-11=3045813Byte,LongRun-31e150ab5b3d4a37a93621ce7a0444fa-12=2372968Byte,LongRun-31e150ab5b3d4a37a93621ce7a0444fa-13=1100968Byte,LongRun-31e150ab5b3d4a37a93621ce7a0444fa-14=827453Byte,LongRun-31e150ab5b3d4a37a93621ce7a0444fa-15=3080842Byte,LongRun-31e150ab5b3d4a37a93621ce7a0444fa-16=626703Byte,LongRun-31e150ab5b3d4a37a93621ce7a0444fa-17=3049210Byte,LongRun-31e150ab5b3d4a37a93621ce7a0444fa-18=430966Byte,LongRun-31e150ab5b3d4a37a93621ce7a0444fa-19=2318729Byte"
       },
       "loading91": {
         "ansible_user": "kafka",
         "ansible_host": "192.168.103.182",
         "topic_name": "LongRun-031ec93f6d6c491590f9ef462c7921b4",
+        "producers": 20,
         "throttle": "65205620Byte",
         "load_map": "LongRun-031ec93f6d6c491590f9ef462c7921b4-0=6107020Byte,LongRun-031ec93f6d6c491590f9ef462c7921b4-1=3870453Byte,LongRun-031ec93f6d6c491590f9ef462c7921b4-2=7022551Byte,LongRun-031ec93f6d6c491590f9ef462c7921b4-3=1811682Byte,LongRun-031ec93f6d6c491590f9ef462c7921b4-4=8237213Byte,LongRun-031ec93f6d6c491590f9ef462c7921b4-5=2348449Byte,LongRun-031ec93f6d6c491590f9ef462c7921b4-6=6544790Byte,LongRun-031ec93f6d6c491590f9ef462c7921b4-7=10559070Byte,LongRun-031ec93f6d6c491590f9ef462c7921b4-8=1486165Byte,LongRun-031ec93f6d6c491590f9ef462c7921b4-9=6114288Byte,LongRun-031ec93f6d6c491590f9ef462c7921b4-10=10085560Byte,LongRun-031ec93f6d6c491590f9ef462c7921b4-11=1018381Byte"
       },
@@ -661,6 +664,9 @@
         "ansible_user": "kafka",
         "ansible_host": "192.168.103.181",
         "topic_name": "LongRun-5858d04609b64565b565691f9a8047ca",
+        "producers": 15,
+        "inflight": "90",
+        "bufferMemory": "120MiB",
         "throttle": "69477680Byte",
         "load_map": "LongRun-5858d04609b64565b565691f9a8047ca-0=712860Byte,LongRun-5858d04609b64565b565691f9a8047ca-1=3837946Byte,LongRun-5858d04609b64565b565691f9a8047ca-2=1439239Byte,LongRun-5858d04609b64565b565691f9a8047ca-3=8421255Byte,LongRun-5858d04609b64565b565691f9a8047ca-4=5270554Byte,LongRun-5858d04609b64565b565691f9a8047ca-5=4531604Byte,LongRun-5858d04609b64565b565691f9a8047ca-6=6777483Byte,LongRun-5858d04609b64565b565691f9a8047ca-7=4684142Byte,LongRun-5858d04609b64565b565691f9a8047ca-8=5594962Byte,LongRun-5858d04609b64565b565691f9a8047ca-9=1465773Byte,LongRun-5858d04609b64565b565691f9a8047ca-10=1198954Byte,LongRun-5858d04609b64565b565691f9a8047ca-11=8501593Byte,LongRun-5858d04609b64565b565691f9a8047ca-12=4818458Byte,LongRun-5858d04609b64565b565691f9a8047ca-13=7904114Byte,LongRun-5858d04609b64565b565691f9a8047ca-14=3146719Byte,LongRun-5858d04609b64565b565691f9a8047ca-15=1172024Byte"
       },
@@ -668,6 +674,7 @@
         "ansible_user": "kafka",
         "ansible_host": "192.168.103.182",
         "topic_name": "LongRun-d23b3694cf0a491ca9123e0dfe8f342d",
+        "producers": 20,
         "throttle": "210909900Byte",
         "load_map": "LongRun-d23b3694cf0a491ca9123e0dfe8f342d-0=32201680Byte,LongRun-d23b3694cf0a491ca9123e0dfe8f342d-1=23115960Byte,LongRun-d23b3694cf0a491ca9123e0dfe8f342d-2=32052080Byte,LongRun-d23b3694cf0a491ca9123e0dfe8f342d-3=20371910Byte,LongRun-d23b3694cf0a491ca9123e0dfe8f342d-4=28072690Byte,LongRun-d23b3694cf0a491ca9123e0dfe8f342d-5=19025750Byte,LongRun-d23b3694cf0a491ca9123e0dfe8f342d-6=4932777Byte,LongRun-d23b3694cf0a491ca9123e0dfe8f342d-7=12093730Byte,LongRun-d23b3694cf0a491ca9123e0dfe8f342d-8=4102846Byte,LongRun-d23b3694cf0a491ca9123e0dfe8f342d-9=12959000Byte,LongRun-d23b3694cf0a491ca9123e0dfe8f342d-10=9935939Byte,LongRun-d23b3694cf0a491ca9123e0dfe8f342d-11=12045500Byte"
       },
@@ -675,6 +682,11 @@
         "ansible_user": "kafka",
         "ansible_host": "192.168.103.181",
         "topic_name": "LongRun-39330ffb0e7a496dad54dd9df9840c2f",
+        "producers": 20,
+        "inflight": "100",
+        "batchSize": "10MiB",
+        "bufferMemory": "100MiB",
+        "recordSize": "1000KiB",
         "throttle": "879025000Byte",
         "load_map": "LongRun-39330ffb0e7a496dad54dd9df9840c2f-0=30795920Byte,LongRun-39330ffb0e7a496dad54dd9df9840c2f-1=75817580Byte,LongRun-39330ffb0e7a496dad54dd9df9840c2f-2=58433090Byte,LongRun-39330ffb0e7a496dad54dd9df9840c2f-3=36830070Byte,LongRun-39330ffb0e7a496dad54dd9df9840c2f-4=17915190Byte,LongRun-39330ffb0e7a496dad54dd9df9840c2f-5=12687180Byte,LongRun-39330ffb0e7a496dad54dd9df9840c2f-6=56770830Byte,LongRun-39330ffb0e7a496dad54dd9df9840c2f-7=9648096Byte,LongRun-39330ffb0e7a496dad54dd9df9840c2f-8=77549210Byte,LongRun-39330ffb0e7a496dad54dd9df9840c2f-9=69149150Byte"
       },
@@ -682,6 +694,11 @@
         "ansible_user": "kafka",
         "ansible_host": "192.168.103.182",
         "topic_name": "LongRun-39330ffb0e7a496dad54dd9df9840c2f",
+        "producers": 20,
+        "inflight": "100",
+        "batchSize": "10MiB",
+        "bufferMemory": "100MiB",
+        "recordSize": "1000KiB",
         "throttle": "879025000Byte",
         "load_map": "LongRun-39330ffb0e7a496dad54dd9df9840c2f-10=95610400Byte,LongRun-39330ffb0e7a496dad54dd9df9840c2f-11=9309326Byte,LongRun-39330ffb0e7a496dad54dd9df9840c2f-12=79975110Byte,LongRun-39330ffb0e7a496dad54dd9df9840c2f-13=68034800Byte,LongRun-39330ffb0e7a496dad54dd9df9840c2f-14=16573640Byte,LongRun-39330ffb0e7a496dad54dd9df9840c2f-15=12108750Byte,LongRun-39330ffb0e7a496dad54dd9df9840c2f-16=38864010Byte,LongRun-39330ffb0e7a496dad54dd9df9840c2f-17=74812660Byte,LongRun-39330ffb0e7a496dad54dd9df9840c2f-18=20481870Byte,LongRun-39330ffb0e7a496dad54dd9df9840c2f-19=17658110Byte"
       }

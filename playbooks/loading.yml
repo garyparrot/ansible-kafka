@@ -35,7 +35,7 @@
         command: 
           - producer
           - "--bootstrap.servers {{ bootstrap_servers }}"
-          - "--batch.size {{ batchSize | default('1MiB') }}"
+          - "--batch.size {{ batchSize | default('900KiB') }}"
           - "--record.size {{ recordSize | default('100KiB') }}"
           - "--max.in.flight {{ inflight | default('30') }}"
           - "--buffer.memory {{ bufferMemory | default('30MiB') }}"
@@ -43,5 +43,6 @@
           - "--producers {{ producers | default('-1') }}"
           - "--send.limit 3000000"
           - "--linger.ms 3000"
+          - "--max.producer 50MiB"
         # - "--topic {{ topic_name }}"
         # - "--throttle {{ throttle }}"

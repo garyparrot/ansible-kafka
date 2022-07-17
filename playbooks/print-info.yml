@@ -39,6 +39,7 @@
     - name: show cluster & monitoring stack information
       ansible.builtin.debug:
         msg:
+            - "ZK port: {{ ZK_PORT }}"
             - "Boostrap Servers = 
               {{ groups[TARGET_GROUP] | product([BROKER_PORT]) | map('join', ':') | join(',') }}"
             - "JMX Servers = 

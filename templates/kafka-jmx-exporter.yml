@@ -12,7 +12,7 @@ rules:
 # Useful broker statistics
 - pattern : kafka.server<type=BrokerTopicMetrics, name=(.+)><>Count
   name: kafka_server_$1
-  type: GAUGE
+  type: COUNTER
 
 # is controller active on this broker
 - pattern : kafka.controller<type=KafkaController,name=ActiveControllerCount><>Value
