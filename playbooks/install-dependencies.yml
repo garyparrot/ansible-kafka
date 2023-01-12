@@ -1,5 +1,5 @@
 ---
-- hosts: cluster_hosts
+- hosts: hosts
   gather_facts: true
   vars_files:
     - ../common-variables.yml

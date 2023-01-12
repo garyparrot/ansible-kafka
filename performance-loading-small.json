@@ -1,0 +1,207 @@
+{
+  "loading-producer-hosts": {
+    "hosts": {
+      "host0": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182"
+      },
+      "host1": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181"
+      }
+    }
+  },
+  "loading-producer-hosts": {
+    "hosts": {
+      "loading197": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic": "AdHoc-5a6c62454a7340c3944d94bf3b5edc05",
+        "partitions": 6,
+        "replicas": 1,
+        "target_partition": 1,
+        "throughput": "221508Byte"
+      },
+      "loading196": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic": "AdHoc-5a6c62454a7340c3944d94bf3b5edc05",
+        "partitions": 6,
+        "replicas": 1,
+        "target_partition": 0,
+        "throughput": "1386324Byte"
+      },
+      "loading195": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic": "AdHoc-89d7347439774f53a28b0781ddc6c01c",
+        "partitions": 7,
+        "replicas": 1,
+        "target_partition": 6,
+        "throughput": "1082975Byte"
+      },
+      "loading194": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic": "AdHoc-89d7347439774f53a28b0781ddc6c01c",
+        "partitions": 7,
+        "replicas": 1,
+        "target_partition": 5,
+        "throughput": "218890Byte"
+      },
+      "loading199": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic": "AdHoc-5a6c62454a7340c3944d94bf3b5edc05",
+        "partitions": 6,
+        "replicas": 1,
+        "target_partition": 3,
+        "throughput": "298967Byte"
+      },
+      "loading198": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic": "AdHoc-5a6c62454a7340c3944d94bf3b5edc05",
+        "partitions": 6,
+        "replicas": 1,
+        "target_partition": 2,
+        "throughput": "635595Byte"
+      },
+      "loading193": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic": "AdHoc-89d7347439774f53a28b0781ddc6c01c",
+        "partitions": 7,
+        "replicas": 1,
+        "target_partition": 4,
+        "throughput": "436027Byte"
+      },
+      "loading192": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic": "AdHoc-89d7347439774f53a28b0781ddc6c01c",
+        "partitions": 7,
+        "replicas": 1,
+        "target_partition": 3,
+        "throughput": "550623Byte"
+      },
+      "loading191": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic": "AdHoc-945e9fa9d53b401fa93f7bd58c77db0c",
+        "partitions": 3,
+        "replicas": 1,
+        "target_partition": 2,
+        "throughput": "330501Byte"
+      },
+      "loading190": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic": "AdHoc-945e9fa9d53b401fa93f7bd58c77db0c",
+        "partitions": 3,
+        "replicas": 1,
+        "target_partition": 1,
+        "throughput": "231631Byte"
+      },
+      "loading175": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic": "AdHoc-de181f3979e0409ca7fda753533d6df7",
+        "partitions": 7,
+        "replicas": 3,
+        "target_partition": 2,
+        "throughput": "925508Byte"
+      },
+      "loading296": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic": "AdHoc-5b47039ce45d4ae5a7e2053992f07d18",
+        "partitions": 9,
+        "replicas": 1,
+        "target_partition": 1,
+        "throughput": "43206Byte"
+      },
+      "loading174": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic": "AdHoc-de181f3979e0409ca7fda753533d6df7",
+        "partitions": 7,
+        "replicas": 3,
+        "target_partition": 1,
+        "throughput": "169792Byte"
+      },
+      "loading295": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic": "AdHoc-5b47039ce45d4ae5a7e2053992f07d18",
+        "partitions": 9,
+        "replicas": 1,
+        "target_partition": 0,
+        "throughput": "20059Byte"
+      },
+      "loading173": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic": "AdHoc-de181f3979e0409ca7fda753533d6df7",
+        "partitions": 7,
+        "replicas": 3,
+        "target_partition": 0,
+        "throughput": "546273Byte"
+      },
+      "loading294": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic": "AdHoc-b305636d01c441829ea52d4ce2d9483c",
+        "partitions": 5,
+        "replicas": 1,
+        "target_partition": 3,
+        "throughput": "95410Byte"
+      },
+      "loading172": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic": "AdHoc-a76857b563af4d64b288bb330f44f5c7",
+        "partitions": 7,
+        "replicas": 1,
+        "target_partition": 0,
+        "throughput": "1039030Byte"
+      },
+      "loading293": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic": "AdHoc-b305636d01c441829ea52d4ce2d9483c",
+        "partitions": 5,
+        "replicas": 1,
+        "target_partition": 2,
+        "throughput": "139735Byte"
+      },
+      "loading179": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic": "AdHoc-de181f3979e0409ca7fda753533d6df7",
+        "partitions": 7,
+        "replicas": 3,
+        "target_partition": 6,
+        "throughput": "607981Byte"
+      },
+      "loading178": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.181",
+        "topic": "AdHoc-de181f3979e0409ca7fda753533d6df7",
+        "partitions": 7,
+        "replicas": 3,
+        "target_partition": 5,
+        "throughput": "173514Byte"
+      },
+      "loading299": {
+        "ansible_user": "kafka",
+        "ansible_host": "192.168.103.182",
+        "topic": "AdHoc-5b47039ce45d4ae5a7e2053992f07d18",
+        "partitions": 9,
+        "replicas": 1,
+        "target_partition": 4,
+        "throughput": "65637Byte"
+      }
+    }
+  }
+}

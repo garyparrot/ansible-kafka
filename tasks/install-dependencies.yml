@@ -5,6 +5,7 @@
       - pip
       - acl
       - iperf
+      - fio
     state: present
   become: true
 

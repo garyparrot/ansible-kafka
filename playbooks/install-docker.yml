@@ -1,4 +1,4 @@
-- hosts: cluster_hosts
+- hosts: hosts
 
   vars:
     pip_install_packages:

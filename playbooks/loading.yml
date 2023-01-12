@@ -44,5 +44,6 @@
           - "--send.limit 3000000"
           - "--linger.ms 3000"
           - "--max.producer 50MiB"
+        # - "--multiply 1.0"
         # - "--topic {{ topic_name }}"
         # - "--throttle {{ throttle }}"

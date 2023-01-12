@@ -41,6 +41,7 @@
         repo: "{{ GIT_REPO }}"
         dest: "{{ GIT_REPO_DEST }}"
         update: yes
+        force: yes
         version: "{{ GIT_REPO_BRANCH }}"
 
     - name: launch Zookeeper on specific host (execute script)
@@ -56,13 +57,18 @@
           - "{{ KAFKA_SCRIPT }}"
           - "broker.id={{ BROKER_ID }}"
           - "zookeeper.connect={{ groups[TARGET_GROUP][0] }}:{{ ZK_PORT }}"
+            # - "num.replica.fetchers=5"
+            # - "num.io.threads=80"
+            # - "num.network.threads=80"
+            # - "background.threads=20"
+            # - "log.cleaner.threads=20"
           - "{{ CONFLUENT_BALANCER_HEAL_TRIGGER if USE_CONFLUENT_BROKER else '' }}"
       environment:
-        VERSION: "3.1.0"
+        # VERSION: "trunk"
         BROKER_PORT: "{{ BROKER_PORT }}"
         EXPORTER_PORT: "{{ EXPORTER_PORT }}"
         BROKER_JMX_PORT: "{{ JMX_PORT }}"
-        JMX_CONFIG_FILE: "{{ JMX_CONFIG_FILE | default('') }}"
+          # JMX_CONFIG_FILE: "{{ JMX_CONFIG_FILE | default('') }}"
         DATA_FOLDERS: "{{ DATA_FOLDERS | default(None) }}"
         CONFLUENT_BROKER: "{{ USE_CONFLUENT_BROKER | default('false') }}"
         HEAP_OPTS: "-Xmx16G -Xms16G"

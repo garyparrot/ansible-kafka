@@ -1,0 +1,33 @@
+---
+- hosts: loading-producer-hosts
+  gather_facts: false
+  strategy: free
+
+  vars_files:
+    - ../common-variables.yml
+
+  vars:
+    BROKER_GROUP: cluster_hosts
+
+  tasks:
+    - name: set fact, generate the bootstrap server address list
+      ansible.builtin.set_fact:
+        bootstrap_servers: "{{ groups[BROKER_GROUP] | product([BROKER_PORT]) | map('join', ':') | join(',') }}" 
+        random_suffix: "{{ range(1000000, 9999999) | random }}" 
+
+    - name: launch the producer
+      community.docker.docker_container:
+        name: "{{ inventory_hostname }}"
+        image: ghcr.io/garyparrot/astraea/app:performance-revise
+        state: started
+        recreate: yes
+        command:
+          - "./bin/app"
+          - "performance"
+          - "--bootstrap.servers {{ bootstrap_servers }}"
+          - "--run.until 1h"
+          - "--topic {{ topic }}"
+          - "--partitions {{ partitions }}"
+          - "--replicas {{ replicas }}"
+          - "--specify.partition {{ target_partition }}"
+          - "--throughput {{ throughput }}"
