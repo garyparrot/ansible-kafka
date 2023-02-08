@@ -44,6 +44,13 @@
         force: yes
         version: "{{ GIT_REPO_BRANCH }}"
 
+    - name: prepare one for the main astraea
+      ansible.builtin.git:
+        repo: "https://github.com/skiptests/astraea.git"
+        dest: "{{ GIT_REPO_MAIN_DEST }}"
+        update: yes
+        force: yes
+
     - name: launch Zookeeper on specific host (execute script)
       ansible.builtin.command: "{{ ZOOKEEPER_SCRIPT }}"
       environment:

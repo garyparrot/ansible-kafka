@@ -8,6 +8,7 @@
     - ../common-variables.yml
 
   vars:
+    KAFKA_GROUP: "cluster_hosts"
     TARGET_GROUP: "monitoring"
     CONFIG_PATH: "{{ GIT_REPO_BASE_DEST }}/prometheus.yml"
 
@@ -18,6 +19,13 @@
         dest: "{{ GIT_REPO_DEST }}"
         update: yes
         version: "{{ GIT_REPO_BRANCH }}"
+
+    - name: prepare one for the main astraea
+      ansible.builtin.git:
+        repo: "https://github.com/skiptests/astraea.git"
+        dest: "{{ GIT_REPO_MAIN_DEST }}"
+        update: yes
+        force: yes
 
     - name: stop old node exporters
       ansible.builtin.import_tasks: ../tasks/remove-monitoring-tools.yml

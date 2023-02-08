@@ -2,6 +2,7 @@
   ansible.builtin.package:
     name:
       - python3
+      - openjdk-11-jre-headless
       - pip
       - acl
       - iperf
