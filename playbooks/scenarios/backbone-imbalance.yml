@@ -1,0 +1,39 @@
+---
+- name: Stop Performance
+  import_playbook: ./backbone-imbalance-stop.yml
+
+- hosts: backbone_imbalance_hosts
+  gather_facts: true
+
+  vars_files:
+    - ../../common-variables.yml
+    - ../../common-configs.yml
+
+  vars:
+    BROKER_GROUP: cluster_hosts
+
+  tasks:
+    - name: set fact, generate the bootstrap server address list
+      ansible.builtin.set_fact:
+        bootstrap_servers: "{{ groups[BROKER_GROUP] | product([BROKER_PORT]) | map('join', ':') | join(',') }}" 
+        throttle_config: "--throttle {{ throttle }}"
+        throughput_config: "--throughput {{ throughput }}"
+
+    - name: Launch Performance Tool
+      community.docker.docker_container:
+        name: performance
+        image: ghcr.io/skiptests/astraea/app:main
+        state: started
+        recreate: yes
+        command:
+          - "./bin/app"
+          - "performance"
+          - "--bootstrap.servers {{ bootstrap_servers }}"
+          - "--run.until 6h"
+          - "--topics {{ topics }}"
+          - "{{ throttle_config if throttle_enable else '' }}"
+          - "{{ throughput_config if throughput_enable else '' }}"
+          - "--key.distribution {{ key_distribution }}"
+          - "--producers 4"
+          - "--consumers 8"
+          - "--value.size 10KiB" 

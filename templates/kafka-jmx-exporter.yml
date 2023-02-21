@@ -1,17 +1,17 @@
 lowercaseOutputName: true
 
 rules:
-# log size in byte
-- pattern : kafka.log<type=Log, name=Size, topic=(.+), partition=(.+)><>Value
-  name: kafka_log_size
-  type: GAUGE
-  labels:
-    topic: "$1"
-    partition: "$2"
+# (disable this since the overhead of sample this metrics is too large) log size in byte
+# - pattern : kafka.log<type=Log, name=Size, topic=(.+), partition=(.+)><>Value
+#   name: kafka_log_size
+#   type: GAUGE
+#   labels:
+#     topic: "$1"
+#     partition: "$2"
 
 # Useful broker statistics
-- pattern : kafka.server<type=BrokerTopicMetrics, name=(.+)><>Count
-  name: kafka_server_$1
+- pattern : kafka.server<type=BrokerTopicMetrics, name=(.+)PerSec\w*><>Count
+  name: kafka_server_brokertopicmetrics_$1_total
   type: COUNTER
 
 # is controller active on this broker
@@ -27,15 +27,15 @@ rules:
   name: kafka_partition_count
   type: GAUGE
 
-# useful per-broker info
+# useful per-broker info (for example: replica count, partition count)
 - pattern : kafka.server<type=ReplicaManager, name=(.+)><>Value
-  name: kafka_server_replica_manager_$1
+  name: kafka_server_replicamanager_$1
   type: GAUGE
 
 # network processor & request handler average idle percent
 - pattern : kafka.network<type=SocketServer, name=NetworkProcessorAvgIdlePercent><>Value
-  name: kafka_server_network_processor_average_idle_percent
+  name: kafka_network_processor_idlepercent
   type: GAUGE
-- pattern : kafka.server<type=KafkaRequestHandlerPool, name=RequestHandlerAvgIdlePercent><>Value
-  name: kafka_server_network_processor_average_idle_percent
+- pattern : kafka.server<type=KafkaRequestHandlerPool, name=RequestHandlerAvgIdlePercent><>(.+)Rate
+  name: kafka_server_kafkarequesthandlerpool_requesthandleravgidle_percent_$1_rate
   type: GAUGE
