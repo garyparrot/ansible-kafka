@@ -1,0 +1,20 @@
+{
+  "backbone_imbalance_hosts": {
+    "hosts": {
+      "192.168.103.184": {
+        "ansible_host": "192.168.103.184",
+        "ansible_user": "kafka",
+        "expected_consume_rate": "799.29 MB/seconds",
+        "expected_produce_rate": "799.29 MB/seconds",
+        "key_distribution": "zipfian",
+        "key_distribution_config": "exponent=1.0",
+        "key_table_seed": "0",
+        "throttle": "backbone-0:15370893Byte/second,backbone-1:26307875Byte/second,backbone-2:11528170Byte/second,backbone-3:18622428Byte/second,backbone-4:99910808Byte/second,backbone-5:28081440Byte/second,backbone-6:15370893Byte/second,backbone-7:26307875Byte/second,backbone-8:11528170Byte/second,backbone-9:18622428Byte/second,backbone-10:99910808Byte/second,backbone-11:28081440Byte/second,backbone-12:15370893Byte/second,backbone-13:26307875Byte/second,backbone-14:11528170Byte/second,backbone-15:18622428Byte/second,backbone-16:99910808Byte/second,backbone-17:28081440Byte/second,backbone-18:15370893Byte/second,backbone-19:26307875Byte/second,backbone-20:11528170Byte/second,backbone-21:18622428Byte/second,backbone-22:99910808Byte/second,backbone-23:28081440Byte/second",
+        "throttle_enable": false,
+        "throughput": "799286464Byte/second",
+        "throughput_enable": true,
+        "topics": "one"
+      }
+    }
+  }
+}

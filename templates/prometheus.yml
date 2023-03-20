@@ -21,9 +21,17 @@ scrape_configs:
         - {{ host }}:{{ NODE_EXPORTER_PORT }}
         {% endfor %}
 
-  - job_name: 'kafka-exporter'
-    scrape_interval: 1s
-    scrape_timeout: 1s
+  - job_name: 'performance-tool'
+    scrape_interval: 2s
+    scrape_timeout: 2s
     static_configs:
       - targets:
-        - 192.168.103.49:1234
+        - 192.168.103.183:5567
+        - 192.168.103.184:5567
+        - 192.168.103.141:5567
+        - 192.168.103.142:5567
+        - 192.168.103.143:5567
+        - 192.168.103.144:5567
+        - 192.168.103.145:5567
+        - 192.168.103.146:5567
+        - 192.168.103.147:5567

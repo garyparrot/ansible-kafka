@@ -7,6 +7,7 @@
       - acl
       - iperf
       - fio
+      - tuned
     state: present
   become: true
 
@@ -22,3 +23,20 @@
       - "requests"
       - "setuptools"
       - "docker==4.1.0"
+
+- name: write tuned mode
+  ansible.builtin.copy:
+    content: |
+      network-latency
+    dest: /etc/tuned/active_profile
+
+- name: write tuned mode
+  ansible.builtin.copy:
+    content: |
+      manual
+    dest: /etc/tuned/profile_mode
+
+- name: restart tuned
+  ansible.builtin.systemd:
+    name: tuned
+    state: restarted

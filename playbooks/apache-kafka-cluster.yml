@@ -67,16 +67,21 @@
           - "num.replica.fetchers=6"
           - "num.io.threads=24"
           - "num.network.threads=24"
+          - "replica.socket.receive.buffer.bytes=-1"
+          # Try to deal with the high per partition consume issue
+          - "message.max.bytes=100000000"
+          - "socket.send.buffer.bytes=800000"
+          - "socket.receive.buffer.bytes=800000"
+          - "socket.request.max.bytes=804857600"
+          # - "queued.max.requests=100000"
           # Increase the receive buffer
           # - "replica.socket.receive.buffer.bytes=1048576"
-          # - "socket.request.max.bytes=104857600"
           # For 10GbE connection
           # - "socket.send.buffer.bytes=16777216"
           # - "socket.receive.buffer.bytes=16777216"
           # - "background.threads=20"
           # - "log.cleaner.threads=20"
           # - "compression.type=lz4"
-          # - "queued.max.requests=10000"
           - "{{ CONFLUENT_BALANCER_HEAL_TRIGGER if USE_CONFLUENT_BROKER else '' }}"
       environment:
         # VERSION: "trunk"
@@ -86,7 +91,7 @@
         JMX_CONFIG_FILE: "{{ JMX_CONFIG_FILE | default('') }}"
         DATA_FOLDERS: "{{ DATA_FOLDERS | default(None) }}"
         CONFLUENT_BROKER: "{{ USE_CONFLUENT_BROKER | default('false') }}"
-        HEAP_OPTS: "-Xmx16G -Xms16G"
+        HEAP_OPTS: "-Xmx8G"
 
       register: output_kafka_script
 

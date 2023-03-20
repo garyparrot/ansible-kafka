@@ -39,3 +39,10 @@ rules:
 - pattern : kafka.server<type=KafkaRequestHandlerPool, name=RequestHandlerAvgIdlePercent><>(.+)Rate
   name: kafka_server_kafkarequesthandlerpool_requesthandleravgidle_percent_$1_rate
   type: GAUGE
+
+# various request rate processing info
+- pattern : "kafka.network<type=RequestMetrics, name=(.+), request=(Produce|FetchConsumer)><>(.+):"
+  name: kafka_network_requestmetrics_$2_$1
+  type: GAUGE
+  labels:
+    attribute: $3

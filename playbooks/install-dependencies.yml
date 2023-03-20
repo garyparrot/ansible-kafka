@@ -1,5 +1,5 @@
 ---
-- hosts: hosts
+- hosts: monitoring
   gather_facts: true
   vars_files:
     - ../common-variables.yml

@@ -48,21 +48,25 @@
         name: "prometheus-{{ PROMETHEUS_PORT }}"
         image: prom/prometheus:v2.32.1
         state: started
+        recreate: true
+        command:
+          - "--config.file=/etc/prometheus/prometheus.yml" 
+          - "--storage.tsdb.path=/prometheus" 
+          - "--web.console.libraries=/usr/share/prometheus/console_libraries"
+          - "--web.console.templates=/usr/share/prometheus/consoles"
+          - "--storage.tsdb.retention.time=7d"
         published_ports:
           - "{{ PROMETHEUS_PORT }}:9090"
         volumes:
           - "{{ CONFIG_PATH }}:/etc/prometheus/prometheus.yml"
+        mounts:
+          - type: volume
+            source: "1187b8fc047ee320ebde96e06b12717e6c981716a5066ed1ec89ba40d499eab9"
+            target: "/prometheus"
 
       environment:
         PROMETHEUS_PORT: "{{ PROMETHEUS_PORT }}"
       when: inventory_hostname == groups[TARGET_GROUP][0]
-
-    - name: launch Grafana on localhost
-      ansible.builtin.command:
-        argv:
-          - "{{ GRAFANA_SCRIPT }}"
-          - "start"
-      when: inventory_hostname in groups["local"]
 
     - name: test if cluster is on 
       ansible.builtin.wait_for:

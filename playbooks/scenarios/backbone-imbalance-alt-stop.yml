@@ -22,7 +22,19 @@
     - name: stop worker
       community.docker.docker_container:
         name: "{{ item }}"
-        image: ghcr.io/garyparrot/astraea/app
+        state: absent
+      loop: "{{ any_worker.stdout_lines }}"
+      changed_when: any_worker.stdout_lines | length > 0 | bool
+      when: inventory_hostname in groups["backbone_imbalance_hosts"]
+
+    - name: Search for loading
+      ansible.builtin.command: "docker ps -aq --filter name=consumer"
+      register: any_worker
+      when: inventory_hostname in groups["backbone_imbalance_hosts"]
+
+    - name: stop worker
+      community.docker.docker_container:
+        name: "{{ item }}"
         state: absent
       loop: "{{ any_worker.stdout_lines }}"
       changed_when: any_worker.stdout_lines | length > 0 | bool
