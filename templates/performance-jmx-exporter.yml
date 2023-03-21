@@ -36,6 +36,29 @@ rules:
     clientId: "$1"
 
 # Consumers
+- pattern: kafka.consumer<type=consumer-metrics, client-id=(.+)><>time-between-poll-avg
+  name: kafka_consumer_consumermetrics_time_between_poll_avg
+  type: GAUGE
+  labels:
+    clientId: "$1"
+- pattern: kafka.consumer<type=consumer-metrics, client-id=(.+)><>poll-idle-ratio-avg
+  name: kafka_consumer_consumermetrics_poll_idle_ratio_avg
+  type: GAUGE
+  labels:
+    clientId: "$1"
+      
+- pattern: kafka.consumer<type=consumer-fetch-manager-metrics, client-id=(.+)><>fetch-size-avg
+  name: kafka_consumer_consumerfetchmanagermetrics_fetch_size_avg
+  type: GAUGE
+  labels:
+    clientId: "$1"
+
+- pattern: kafka.consumer<type=consumer-fetch-manager-metrics, client-id=(.+)><>records-per-request-avg
+  name: kafka_consumer_consumerfetchmanagermetrics_records_per_request_avg
+  type: GAUGE
+  labels:
+    clientId: "$1"
+
 - pattern: kafka.consumer<type=consumer-fetch-manager-metrics, client-id=(.+)><>bytes-consumed-total
   name: kafka_consumer_consumerfetchmanagermetrics_bytes_consumed_total
   type: COUNTER
