@@ -9,6 +9,7 @@
 
   vars:
     TARGET_GROUP: cluster_hosts
+    MONITOR_GROUP: "monitoring"
 
   tasks:
     - name: prepare balancer.properties
@@ -16,13 +17,23 @@
         src: ../templates/balancer.properties.j2
         dest: "{{ BALANCER_CONFIG_FILE }}"
 
+    - name: test if cluster controller is on
+      ansible.builtin.wait_for:
+        host: "{{ ansible_host }}" 
+        port: "9093"
+        timeout: 3
+        msg: "Kafka broker {{ ansible_host }}:9093 is unreachable."
+      when: inventory_hostname == groups[TARGET_GROUP][0]
+      ignore_errors: yes
+      register: test_kafka
+
     - name: test if cluster is on 
       ansible.builtin.wait_for:
         host: "{{ ansible_host }}" 
         port: "{{ BROKER_PORT }}"
         timeout: 3
         msg: "Kafka broker {{ ansible_host }}:{{ BROKER_PORT }} is unreachable."
-      when: inventory_hostname in groups[TARGET_GROUP]
+      when: inventory_hostname in groups[TARGET_GROUP][1:]
       ignore_errors: yes
       register: test_kafka
 
@@ -32,7 +43,7 @@
         port: "{{ PROMETHEUS_PORT }}"
         timeout: 3
         msg: "No prometheus detected at {{ ansible_host }}:{{ PROMETHEUS_PORT }}"
-      when: inventory_hostname == groups[TARGET_GROUP][0]
+      when: inventory_hostname == groups[MONITOR_GROUP][0]
       ignore_errors: yes
       register: test_prometheus
 
