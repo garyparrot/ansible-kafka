@@ -1,0 +1,20 @@
+---
+- name: Tuning kernel config to suit Kafka's needs
+  hosts: cluster_hosts
+  gather_facts: true
+  become: yes
+
+  vars_files:
+    - ../common-variables.yml
+    - ../common-configs.yml
+
+  tasks:
+    - name: tuning read ahead setting
+      ansible.builtin.shell: "echo 50000 > /sys/block/nvme0n1/queue/read_ahead_kb"
+      become: true
+    - name: tuning read ahead setting
+      ansible.builtin.shell: "echo 50000 > /sys/block/nvme1n1/queue/read_ahead_kb"
+      become: true
+    - name: tuning read ahead setting
+      ansible.builtin.shell: "echo 50000 > /sys/block/nvme2n1/queue/read_ahead_kb"
+      become: true

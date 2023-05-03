@@ -17,8 +17,16 @@
     - name: set fact, generate the bootstrap server address list
       ansible.builtin.set_fact:
         bootstrap_servers: "{{ groups[BROKER_GROUP] | product([BROKER_PORT]) | map('join', ':') | join(',') }}" 
+
+    - name: set fact
+      ansible.builtin.set_fact:
         throttle_config: "--throttle {{ throttle }}"
+      when: "throttle is defined"
+
+    - name: set fact
+      ansible.builtin.set_fact:
         throughput_config: "--throughput {{ throughput }}"
+      when: "throughput is defined"
 
     - name: prepare JMX exporter config file
       ansible.builtin.template:
@@ -44,8 +52,9 @@
 
     - name: Launch Performance Tool
       community.docker.docker_container:
-        name: performance
-        image: ghcr.io/skiptests/astraea/app:main
+        name: "{{ container_name | default('performance') }}"
+          # image: ghcr.io/skiptests/astraea/app:main
+        image: ghcr.io/garyparrot/astraea/app:perf-allow-no-producer
         state: started
         recreate: yes
         env:
@@ -56,21 +65,24 @@
             -Dcom.sun.management.jmxremote.port=5566
             -Dcom.sun.management.jmxremote.rmi.port=5566
             -Djava.rmi.server.hostname={{ ansible_host }}
-          JAVA_OPTS: -Xmx16g
-        ports:
-          - "5566:5566"
+          JAVA_OPTS: -Xmx12g
+        # ports:
+        #   - "5566:5566"
         command:
           - "./bin/app"
           - "performance"
           - "--bootstrap.servers {{ bootstrap_servers }}"
-          - "--run.until 30m"
+          - "--run.until 3h"
           - "--topics {{ topics }}"
           - "{{ throttle_config if throttle_enable else '' }}"
           - "{{ throughput_config if throughput_enable else '' }}"
           - "--record.key.table.seed {{ key_table_seed }}"
           - "--key.distribution {{ key_distribution }}"
           - "--key.distribution.config '{{ key_distribution_config | default('k=v') }}'"
-          - "--producers 2"
-          - "--consumers 1"
-          - "--configs buffer.memory=50000000,linger.ms=1,batch.size=100000,max.request.size=100485760,send.buffer.bytes=1002400,receive.buffer.bytes=1002400,max.partition.fetch.bytes=200000000,fetch.max.bytes=200000000,fetch.max.wait.ms=5,check.crcs=false,acks=0,metrics.sample.window.ms=100"
+          - "--read.idle 15s"
+          - "--producers {{ 0 if (no_producer=='true') else 4 }}"
+          - "--consumers {{ 0 if (no_consumer=='true') else 12 }}"
+          - "--configs receive.buffer.bytes=1002400,buffer.memory=500000000,linger.ms=1,batch.size=1000000,fetch.max.bytes=50000000,fetch.min.bytes=20000000,max.partition.fetch.bytes=20000000,fetch.max.wait.ms=5,max.poll.records=9999999,check.crcs=false,acks=0,metrics.sample.window.ms=1000"
+          # - "--configs buffer.memory=1000000000,linger.ms=1,batch.size=1000000,fetch.min.bytes=100000000,fetch.max.bytes=100000000,max.partition.fetch.bytes=200000000,fetch.max.wait.ms=1,check.crcs=false,acks=0,metrics.sample.window.ms=200"
+          #- "--configs buffer.memory=50000000,linger.ms=1,batch.size=100000,max.request.size=100485760,send.buffer.bytes=1002400,receive.buffer.bytes=1002400,max.partition.fetch.bytes=100000000,fetch.max.bytes=400000000,fetch.max.wait.ms=5,check.crcs=false,acks=0,metrics.sample.window.ms=100"
           - "--value.size 10KiB" 

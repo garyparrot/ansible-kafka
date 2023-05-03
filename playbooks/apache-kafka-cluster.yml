@@ -69,16 +69,17 @@
           - "num.network.threads=24"
           - "replica.socket.receive.buffer.bytes=-1"
           # Try to deal with the high per partition consume issue
-          - "message.max.bytes=100000000"
-          - "socket.send.buffer.bytes=800000"
-          - "socket.receive.buffer.bytes=800000"
-          - "socket.request.max.bytes=804857600"
-          # - "queued.max.requests=100000"
+          - "message.max.bytes=629145600" # 600 MB
+          # - "socket.send.buffer.bytes=800000"
+          # - "socket.receive.buffer.bytes=800000"
+          - "socket.request.max.bytes=504857600"
+          - "queued.max.requests=5000"
+          - "fetch.max.bytes=504857600"
           # Increase the receive buffer
           # - "replica.socket.receive.buffer.bytes=1048576"
           # For 10GbE connection
-          # - "socket.send.buffer.bytes=16777216"
-          # - "socket.receive.buffer.bytes=16777216"
+          - "socket.send.buffer.bytes=16000000"
+          - "socket.receive.buffer.bytes=200000"
           # - "background.threads=20"
           # - "log.cleaner.threads=20"
           # - "compression.type=lz4"

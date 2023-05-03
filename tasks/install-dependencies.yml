@@ -27,7 +27,7 @@
 - name: write tuned mode
   ansible.builtin.copy:
     content: |
-      network-latency
+      throughput-performance
     dest: /etc/tuned/active_profile
 
 - name: write tuned mode
