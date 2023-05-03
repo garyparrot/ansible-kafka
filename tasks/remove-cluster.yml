@@ -3,6 +3,10 @@
   ansible.builtin.command: "docker ps -aq --filter name=broker-*-*"
   register: any_kafka
 
+- name: search for astraea's apache kafka controller instance
+  ansible.builtin.command: "docker ps -aq --filter ancestor={{ CT_IMAGE_NAME }}"
+  register: any_kafka_controller
+
 - name: Search for Zookeeper
   ansible.builtin.command: "docker ps -aq --filter ancestor={{ ZK_IMAGE_NAME }}"
   register: any_zookeeper
@@ -11,6 +15,12 @@
   ansible.builtin.debug: 
     var:
       any_kafka
+  tags: debug
+
+- name: debug
+  ansible.builtin.debug: 
+    var:
+      any_kafka_controller
   tags: debug
 
 - name: debug
@@ -27,13 +37,22 @@
   loop: "{{ any_kafka.stdout_lines }}"
   changed_when: any_kafka.stdout_lines | length > 0 | bool
 
+
+- name: stop and prune controller
+  community.docker.docker_container:
+    name: "{{ item }}"
+    state: absent
+    force_kill: yes
+  loop: "{{ any_kafka_controller.stdout_lines }}"
+  changed_when: any_kafka_controller.stdout_lines | length > 0 | bool
+
 - name: stop and prune zookeeper
   community.docker.docker_container:
     name: "{{ item }}"
     state: absent
     force_kill: yes
   loop: "{{ any_zookeeper.stdout_lines }}"
-  changed_when: any_kafka.stdout_lines | length > 0 | bool
+  changed_when: any_zookeeper.stdout_lines | length > 0 | bool
 
 - name: remove old broker folder
   ansible.builtin.file:
