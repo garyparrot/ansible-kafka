@@ -1,0 +1,131 @@
+---
+- name: shutdown loading
+  import_playbook: ./stop-loading.yml
+
+- hosts: cluster_hosts
+  gather_facts: true
+
+  vars_files:
+    - ../common-variables.yml
+    - ../common-configs.yml
+
+  vars:
+    TARGET_GROUP: cluster_hosts
+    JMX_CONFIG_FILE: "{{ GIT_REPO_BASE_DEST }}/kafka-jmx-exporter.yml"
+    USE_CONFLUENT_BROKER: "{{ CONFLUENT_BROKER | default('false') | bool }}"
+
+  pre_tasks:
+    - name: ensure base dir exists
+      ansible.builtin.file:
+        path: "{{ GIT_REPO_BASE_DEST }}"
+        state: directory 
+
+    - name: prepare JMX exporter config file
+      ansible.builtin.template:
+        src: ../templates/kafka-jmx-exporter.yml
+        dest: "{{ JMX_CONFIG_FILE }}"
+
+  tasks:
+    - name: remove old cluster instance if one exists
+      import_tasks: ../tasks/remove-cluster.yml
+
+    - name: ensure data directories exists
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory 
+      loop: "{{ DATA_FOLDERS.split(',') }}"
+      when: "DATA_FOLDERS is defined"
+
+    - name: ensure astraea project exists and move to the newest progress
+      ansible.builtin.git:
+        repo: "{{ GIT_REPO }}"
+        dest: "{{ GIT_REPO_DEST }}"
+        update: yes
+        force: yes
+        version: "{{ GIT_REPO_BRANCH }}"
+
+    - name: prepare one for the main astraea
+      ansible.builtin.git:
+        repo: "https://github.com/skiptests/astraea.git"
+        dest: "{{ GIT_REPO_MAIN_DEST }}"
+        update: yes
+        force: yes
+
+    - name: Generate a random string
+      set_fact:
+        random_cluster_id: "ZdeM1C4Sxx4G8IkCP4wtAV"
+
+    - name: launch controller broker on specific host (execute script)
+      ansible.builtin.command: 
+        argv:
+          - "{{ CONTROLLER_SCRIPT }}"
+          - "controller.quorum.voters=0@{{ groups[TARGET_GROUP][0] }}:9093"
+          - "node.id={{ BROKER_ID }}"
+      register: output_controller_script
+      environment:
+        CONTROLLER_PORT: "9093"
+        CLUSTER_ID: "{{ random_cluster_id }}"
+      when: inventory_hostname == groups[TARGET_GROUP][0]
+
+    - name: Wait for service to be ready
+      ansible.builtin.wait_for:
+        port: "9093"
+        host: "{{ groups[TARGET_GROUP][0] }}"
+        connect_timeout: 3
+        delay: 1
+        timeout: 10
+    
+    - name: launch Kafka on all hosts (execute script)
+      ansible.builtin.command: 
+        argv:
+          - "{{ KAFKA_SCRIPT }}"
+          - "controller.quorum.voters=0@{{ groups[TARGET_GROUP][0] }}:9093"
+          - "node.id={{ BROKER_ID }}"
+          - "num.replica.fetchers=6"
+          - "num.io.threads=24"
+          - "num.network.threads=24"
+          - "replica.socket.receive.buffer.bytes=-1"
+          # Try to deal with the high per partition consume issue
+          - "message.max.bytes=629145600" # 600 MB
+          # - "socket.send.buffer.bytes=800000"
+          # - "socket.receive.buffer.bytes=800000"
+          - "socket.request.max.bytes=504857600"
+          - "queued.max.requests=5000"
+          - "fetch.max.bytes=504857600"
+          # Increase the receive buffer
+          # - "replica.socket.receive.buffer.bytes=1048576"
+          # For 10GbE connection
+          - "socket.send.buffer.bytes=16000000"
+          - "socket.receive.buffer.bytes=200000"
+          # - "background.threads=20"
+          # - "log.cleaner.threads=20"
+          # - "compression.type=lz4"
+          - "metric.reporters=com.linkedin.kafka.cruisecontrol.metricsreporter.CruiseControlMetricsReporter"
+          - "{{ CONFLUENT_BALANCER_HEAL_TRIGGER if USE_CONFLUENT_BROKER else '' }}"
+      environment:
+        # VERSION: "trunk"
+        BROKER_PORT: "{{ BROKER_PORT }}"
+        EXPORTER_PORT: "{{ EXPORTER_PORT }}"
+        BROKER_JMX_PORT: "{{ JMX_PORT }}"
+        JMX_CONFIG_FILE: "{{ JMX_CONFIG_FILE | default('') }}"
+        DATA_FOLDERS: "{{ DATA_FOLDERS | default(None) }}"
+        CONFLUENT_BROKER: "{{ USE_CONFLUENT_BROKER | default('false') }}"
+        CUSTOM_MOUNT: "/tmp/cruise-control-metrics-reporter.jar"
+        HEAP_OPTS: "-Xmx8G"
+        CLUSTER_ID: "{{ random_cluster_id }}"
+      when: inventory_hostname != groups[TARGET_GROUP][0]
+
+      register: output_kafka_script
+
+    - name: debug zookeeper script
+      ansible.builtin.debug:
+        var: output_controller_script
+      when: DEBUG_MESSAGE
+
+    - name: debug kafka script
+      ansible.builtin.debug:
+        var: output_kafka_script
+      when: DEBUG_MESSAGE
+    
+- name: import the friendly print-info playbook
+  import_playbook: ./print-info.yml

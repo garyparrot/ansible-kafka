@@ -3,12 +3,17 @@
     name:
       - python3
       - openjdk-11-jre-headless
+      - openjdk-17-jre-headless
       - pip
       - acl
       - iperf
       - fio
       - tuned
     state: present
+  become: true
+
+- name: set java 17
+  ansible.builtin.command: "update-java-alternatives --set /usr/lib/jvm/java-1.17.0-openjdk-amd64"
   become: true
 
 - ansible.builtin.package:

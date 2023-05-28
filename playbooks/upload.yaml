@@ -1,0 +1,11 @@
+---
+- name: Upload file to remotes
+  hosts: monitoring
+
+  # ansible-playbook -i inventory.ini upload.yml -e "src=/path/to/local/file.txt dest=/path/to/remote/destination/file.txt"
+
+  tasks:
+    - name: Upload
+      ansible.builtin.copy:
+        src: "{{ src }}"
+        dest: "{{ dst }}"
